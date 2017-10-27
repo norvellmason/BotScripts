@@ -53,6 +53,9 @@ namespace Engine
         // the infix operators supported by this parser
         private Dictionary<String, InfixOperator> infixOperators;
 
+        // the order that infix operator will be executed in
+        private List<String> infixOrder;
+
         // the variables names supported by this parser
         private HashSet<String> variableNames;
 
@@ -64,10 +67,11 @@ namespace Engine
         /// <param name="unaryOperators">the supported unary operators</param>
         /// <param name="infixOperators">the supported infix operators</param>
         /// <param name="variableNames">the supported variable names</param>
-        public Parser(Dictionary<String, UnaryOperator> unaryOperators, Dictionary<String, InfixOperator> infixOperators, HashSet<String> variableNames)
+        public Parser(Dictionary<String, UnaryOperator> unaryOperators, Dictionary<String, InfixOperator> infixOperators, List<String> infixOrder, HashSet<String> variableNames)
         {
             this.unaryOperators = unaryOperators;
             this.infixOperators = infixOperators;
+            this.infixOrder = infixOrder;
             this.variableNames = variableNames;
         }
 
@@ -86,29 +90,156 @@ namespace Engine
             // remove whitespace from the expression
             expression = Regex.Replace(expression, "\\s+", "");
 
-            List<Token> tokens = new List<Token> ();
+            // tokenize the string
+            List<object> tokens = Tokenize(expression, lookup);
+
+            for(int index = 0; index < tokens.Count; index++)
+            {
+                if(tokens[index] is String op)
+                {
+                    if(index - 1 < 0 || tokens[index - 1] is String)
+                    {
+                        // operator is unary!!!
+                        if(index + 1 < tokens.Count && !(tokens[index + 1] is String))
+                        {
+                            object operand = tokens[index + 1];
+
+                            tokens.RemoveRange(index, 2);
+                            tokens.Insert(index, unaryOperators[op](operand));
+                        }
+                        else
+                        {
+                            throw new ParseException("Unary operator '" + op + "' is in invalid position");
+                        }
+                    }
+                }
+            }
+
+            foreach(String globOp in infixOrder)
+            {
+                for(int index = 0; index < tokens.Count; index++)
+                {
+                    if(tokens[index] is String op)
+                    {
+                        if(op == globOp)
+                        {
+                            if(index - 1 < 0 || tokens[index - 1] is String || index + 1 >= tokens.Count || tokens[index + 1] is String)
+                                throw new ParseException("Infix operator '" + op + "' is in invalid position");
+
+                            object leftOperand = tokens[index - 1];
+                            object rightOperand = tokens[index + 1];
+
+                            tokens.RemoveRange(index - 1, 3);
+                            tokens.Insert(--index, infixOperators[op](leftOperand, rightOperand));
+                        }
+                    }
+                }
+            }
+
+            if(tokens.Count == 1)
+                return tokens[0];
+
+            throw new ParseException("Expression did not properly evaluate");
+        }
+
+        /// <summary>
+        /// Tokenizes an expression into the relevant symbols.
+        /// </summary>
+        /// 
+        /// <param name="expression">the expression to tokenize</param>
+        /// <param name="lookup">the lookup to use for variables</param>
+        /// 
+        /// <returns>the tokens in the expression</returns>
+        private List<object> Tokenize(String expression, VariableLookup lookup)
+        {
+            List<object> tokens = new List<object>();
             while(expression.Length > 0)
             {
                 String match = "";
-                Token.TokenType type = Token.TokenType.CONSTANT;
+                String type = null;
 
-                FindMatch(expression, unaryOperators.Keys, Token.TokenType.UNARY, ref match, ref type);
-                FindMatch(expression, infixOperators.Keys, Token.TokenType.INFIX, ref match, ref type);
-                FindMatch(expression, variableNames, Token.TokenType.VARIABLE, ref match, ref type);
-
-                if(type == Token.TokenType.CONSTANT)
+                if(expression[0] == '(')
                 {
-                    Match matchResult = Regex.Match(expression, @"(?:^\d+(\.\d+)?)|(?:^\.\d+)");
-                    if(matchResult.Success)
-                        match = matchResult.Value;
+                    match = expression.Substring(0, GetClosingParenthesisPosition(expression) + 1);
+                    object result = match.Substring(1, match.Length - 1);
+
+                    if(result is float || result is bool)
+                        tokens.Add(result);
                     else
-                        throw new ParseException("Unknown token starting at '" + expression + "'");
+                        throw new ParseException("Subexpression did not return a float or bool");
+                }
+                else
+                {
+                    FindMatch(expression, unaryOperators.Keys, "operator", ref match, ref type);
+                    FindMatch(expression, infixOperators.Keys, "operator", ref match, ref type);
+                    FindMatch(expression, variableNames, "variable", ref match, ref type);
+
+                    if(type == "operator")
+                    {
+                        tokens.Add(match);
+                    }
+                    else if(type == "variable")
+                    {
+                        try
+                        {
+                            tokens.Add(lookup(match));
+                        }
+                        catch(ArgumentException ae)
+                        {
+                            throw new ParseException("Failed to retieve value of variable '" + match + "':\n" + ae.Message);
+                        }
+                    }
+                    else
+                    {
+                        Match matchResult = Regex.Match(expression, @"(?:^\d+(\.\d+)?)|(?:^\.\d+)");
+                        if(matchResult.Success)
+                        {
+                            match = matchResult.Value;
+                            tokens.Add(float.Parse(match));
+                        }
+                        else
+                        {
+                            throw new ParseException("Unknown token starting at '" + expression + "'");
+                        }
+                    }
                 }
 
-                tokens.Add(new Token(match, type));
+                expression = expression.Substring(match.Length);
             }
 
-            return null;
+            return tokens;
+        }
+
+        /// <summary>
+        /// Finds the position of the parentehsis that closes the first
+        /// parenthesis found in the expression
+        /// </summary>
+        /// 
+        /// <param name="expression">the expression to search</param>
+        /// 
+        /// <returns>the position of the closing parenthesis</returns>
+        private int GetClosingParenthesisPosition(String expression)
+        {
+            int depth = 0;
+            for(int index = 0; index < expression.Length; index++)
+            {
+                if(expression[index] == '(')
+                {
+                    depth += 1;
+                }
+                else if(expression[index] == ')')
+                {
+                    depth -= 1;
+
+                    if(depth == 0)
+                        return index;
+                }
+            }
+
+            if(depth == 0)
+                throw new ParseException("No parentheses found");
+
+            throw new ParseException("No closing parenthesis found");
         }
 
         /// <summary>
@@ -121,48 +252,15 @@ namespace Engine
         /// <param name="valueType">the type of the given values</param>
         /// <param name="match">the current match</param>
         /// <param name="type">the current type</param>
-        private void FindMatch(String expression, IEnumerable<String> values, Token.TokenType valueType, ref String match, ref Token.TokenType type)
+        private void FindMatch(String expression, IEnumerable<String> values, String valueType, ref String match, ref String type)
         {
             foreach(String value in values)
             {
-                if(value.Length > match.Length && expression.IndexOf(value) >= 0)
+                if(value.Length > match.Length && expression.IndexOf(value) == 0)
                 {
                     match = value;
                     type = valueType;
                 }
-            }
-        }
-
-        private class Token
-        {
-            /// <summary>
-            /// The value of this token.
-            /// </summary>
-            public String Value { get; private set; }
-
-            /// <summary>
-            /// The type of this token.
-            /// </summary>
-            public TokenType Type { get; private set; }
-
-            /// <summary>
-            /// Construct a new Token with the given value and type.
-            /// </summary>
-            /// 
-            /// <param name="value">the value of this token</param>
-            /// <param name="type">the type of this token</param>
-            public Token(String value, TokenType type)
-            {
-                Value = value;
-                Type = type;
-            }
-
-            /// <summary>
-            /// The types of tokens that can exist.
-            /// </summary>
-            public enum TokenType
-            {
-                UNARY, INFIX, VARIABLE, CONSTANT
             }
         }
 
