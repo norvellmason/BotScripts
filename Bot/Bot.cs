@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
 
-namespace Bot
+namespace Engine
 {
     /// <summary>
     /// A bot that exists in the world.
