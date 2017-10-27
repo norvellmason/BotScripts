@@ -37,6 +37,7 @@
             this.ClientSize = new System.Drawing.Size(1262, 673);
             this.Name = "GameplayForm";
             this.Text = "BotScripts";
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.GameplayForm_Paint);
             this.ResumeLayout(false);
 
         }
