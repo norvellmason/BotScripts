@@ -23,6 +23,11 @@ namespace Engine
         public float Angle { get; private set; }
 
         /// <summary>
+        /// The path that defines the bot when it renders
+        /// </summary>
+        public Renderable BotRenderable { get; private set; }
+
+        /// <summary>
         /// Construct a new bot with at the given x and y cooridnates, and the
         /// given angle.
         /// </summary>
@@ -30,10 +35,12 @@ namespace Engine
         /// <param name="x">the x cooridnate of the bot</param>
         /// <param name="y">the y cooridnate of the bot</param>
         /// <param name="angle">the angle of the bot</param>
-        public Bot(float x, float y, float angle)
+        /// <param name="renderable">the path that defines the bot when it renders</param>
+        public Bot(float x, float y, float angle, Renderable renderable)
         {
             Position = new PointF(x, y);
             Angle = angle;
+            BotRenderable = renderable;
         }
 
         /// <summary>
@@ -42,10 +49,12 @@ namespace Engine
         /// 
         /// <param name="position">the position of the bot</param>
         /// <param name="angle">the angle of the bot</param>
-        public Bot(PointF position, float angle)
+        /// <param name="renderable">the path that defines the bot when it renders</param>
+        public Bot(PointF position, float angle, Renderable renderable)
         {
             Position = position;
             Angle = angle;
+            BotRenderable = renderable;
         }
     }
 }
