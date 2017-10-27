@@ -20,7 +20,7 @@ namespace BotScripts_UI
 
         }
 
-        public void Render(Bot theBot, PointF position, float angle)
+        public void Render(Renderable renderable, PointF position, float angle)
         {
 
         }
