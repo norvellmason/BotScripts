@@ -35,6 +35,42 @@ namespace Parser
         public delegate object InfixOperator(object leftOperand, object rightOperand);
 
         /// <summary>
+        /// Retrieves the value of a variable using its name. If there is an
+        /// error while getting the value of the variable, an ArgumentException
+        /// should be thrown with a message describing the exception.
+        /// </summary>
+        /// 
+        /// <param name="variableName">the name of the variable to retrive the
+        /// value of</param>
+        /// 
+        /// <returns>the value of the requested variable</returns>
+        public delegate object VariableLookup(String variableName);
+
+        // the unary operators supported by this parser
+        private Dictionary<String, UnaryOperator> unaryOperators;
+
+        // the infix operators supported by this parser
+        private Dictionary<String, InfixOperator> infixOperators;
+
+        // the variables names supported by this parser
+        private HashSet<String> variableNames;
+
+        /// <summary>
+        /// Construct a Parser with the given unary operators, infix operator,
+        /// and variable names.
+        /// </summary>
+        /// 
+        /// <param name="unaryOperators">the supported unary operators</param>
+        /// <param name="infixOperators">the supported infix operators</param>
+        /// <param name="variableNames">the supported variable names</param>
+        public Parser(Dictionary<String, UnaryOperator> unaryOperators, Dictionary<String, InfixOperator> infixOperators, HashSet<String> variableNames)
+        {
+            this.unaryOperators = unaryOperators;
+            this.infixOperators = infixOperators;
+            this.variableNames = variableNames;
+        }
+
+        /// <summary>
         /// Describes an exception that occurs while executing an operation.
         /// </summary>
         public class OperationException : Exception
