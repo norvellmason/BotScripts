@@ -28,17 +28,15 @@ namespace BotScripts_UI
             InitializeComponent();
 
 
-            testBot  = new Bot(new PointF(300, 300), 0.0f, new Renderable(new List<PointF>(), true));
-            testBot2 = new Bot(new PointF(100, 100), 0.0f, new Renderable(new List<PointF>() , true));
+            testBot  = new Bot(new PointF(50, 300), 0.0f, new Renderable(new List<PointF>(), true));
+            testBot2 = new Bot(new PointF(350, 300), (float)Math.PI, new Renderable(new List<PointF>() , true));
 
             botsToRender.Add(testBot);
             botsToRender.Add(testBot2);
 
-            bitmap = new Bitmap(Width, Height);
+            bitmap = new Bitmap(Width - 400, 672);
             g = Graphics.FromImage(bitmap);
         }
-
-        private float angle = 0;
 
         /// <summary>
         /// Gets calles when a paint event triggers, and renders all of the on screen elements using
@@ -52,10 +50,10 @@ namespace BotScripts_UI
 
             foreach (Bot bot in botsToRender)
             {
-                bot.Renderable.Render(bot.Position, angle, Color.Black, g);
+                bot.Renderable.Render(bot.Position, bot.Angle, Color.Black, g);
             }
 
-            e.Graphics.DrawImage(bitmap, 0, 0);
+            e.Graphics.DrawImage(bitmap, 200, 0);
 
             System.Threading.Thread.Sleep(16);
             Invalidate();
