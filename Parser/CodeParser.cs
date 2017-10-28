@@ -120,6 +120,11 @@ namespace Engine
             return state;
         }
 
+        public void SetCode(String[] lines)
+        {
+            this.lines = lines;
+        }
+
         private int GetLineDepth(String line)
         {
             return Regex.Match(line, @"^\s*").Value.Length;
