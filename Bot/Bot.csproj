@@ -46,5 +46,11 @@
     <Compile Include="Renderable.cs" />
     <Compile Include="World.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Parser\Parser.csproj">
+      <Project>{6453e477-b52b-4c9a-ab0d-c58609ed9e53}</Project>
+      <Name>Parser</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

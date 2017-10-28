@@ -35,7 +35,7 @@ namespace BotScripts_UI
             world.Render(e.Graphics);
 
             System.Threading.Thread.Sleep(16);
-            Invalidate();
+            panel1.Invalidate();
         }
 
         /// <summary>
