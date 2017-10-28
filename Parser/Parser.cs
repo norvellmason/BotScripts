@@ -161,7 +161,7 @@ namespace Engine
                 if(expression[0] == '(')
                 {
                     match = expression.Substring(0, GetClosingParenthesisPosition(expression) + 1);
-                    object result = match.Substring(1, match.Length - 1);
+                    object result = Parse(match.Substring(1, match.Length - 2), lookup);
 
                     if(result is float || result is bool)
                         tokens.Add(result);

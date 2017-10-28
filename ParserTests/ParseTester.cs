@@ -19,6 +19,13 @@ namespace ParserTests
                 throw new ArgumentException("Cannot negate a boolean");
             });
 
+            unaryOperators.Add("sqrt", (operand) => {
+                if(operand is float)
+                    return (float)Math.Sqrt((float)operand);
+
+                throw new ArgumentException("Cannot square root a boolean");
+            });
+
             Dictionary<String, Parser.InfixOperator> infixOperators = new Dictionary<String, Parser.InfixOperator>();
             infixOperators.Add("+", (left, right) => {
                 if(left is float && right is float)
@@ -27,8 +34,29 @@ namespace ParserTests
                 throw new ArgumentException("Can only add two floats");
             });
 
+            infixOperators.Add("-", (left, right) => {
+                if(left is float && right is float)
+                    return ((float)left) - ((float)right);
+
+                throw new ArgumentException("Can only add two floats");
+            });
+
+            infixOperators.Add("*", (left, right) => {
+                if(left is float && right is float)
+                    return ((float)left) * ((float)right);
+
+                throw new ArgumentException("Can only mulitpy two floats");
+            });
+
+            infixOperators.Add("/", (left, right) => {
+                if(left is float && right is float)
+                    return ((float)left) / ((float)right);
+
+                throw new ArgumentException("Can only mulitpy two floats");
+            });
+
             List<String> infixOrder = new List<String>() {
-                "+"
+                "*", "/", "+", "-"
             };
 
             HashSet<String> variableNames = new HashSet<String>() { "PI" };
@@ -45,7 +73,7 @@ namespace ParserTests
 
             Parser parser = new Parser(unaryOperators, infixOperators, infixOrder, variableNames);
 
-            object result = parser.Parse("PI", lookup);
+            object result = parser.Parse("sqrt(2 * 2 + 1) / sqrt(5)", lookup);
         }
     }
 }
