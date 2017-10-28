@@ -15,6 +15,7 @@ namespace CodeParserInteractive
     public partial class CodeParserInteractive : Form
     {
         public static List<String> OPERATORS = new List<String>() { "*", "/", "+", "-", ">", "<", ">=", "<=", "==", "!=", "||", "&&" };
+        private BotScript computerScript;
 
         public CodeParserInteractive()
         {
@@ -110,7 +111,18 @@ namespace CodeParserInteractive
         {
             Dictionary<String, object> inputs = ParseInputs(variableInput.Text);
 
-            BotScript computerScript = new BotScript(inputs.Keys, inputs.Keys, OPERATORS, 1000);
+            computerScript = new BotScript(inputs.Keys, inputs.Keys, OPERATORS, 20);
+
+            codeInput.Text = "";
+            foreach(String line in computerScript.getLines())
+            {
+                codeInput.Text += line + Environment.NewLine;
+            }
+        }
+
+        private void botModifyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            computerScript.Mutate();
 
             codeInput.Text = "";
             foreach(String line in computerScript.getLines())

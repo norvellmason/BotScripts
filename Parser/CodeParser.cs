@@ -119,24 +119,22 @@ namespace Engine
                             if(statement.IndexOf(name) == 0 && name.Length > bestVAr.Length)
                                 bestVAr = name;
                         }
+
+                        if(bestVAr == "")
+                            throw new ArgumentException("Could not find varaible");
                         
-                        if(statement.IndexOf(bestVAr) == 0)
-                        {
-                            if(outputVariables.Contains(bestVAr)) {
-                                String expression = Regex.Replace(statement.Substring(bestVAr.Length), @"^\s*=\s*", "");
-                                object result = expressionParser.Parse(expression, state);
+                        if(outputVariables.Contains(bestVAr)) {
+                            String expression = Regex.Replace(statement.Substring(bestVAr.Length), @"^\s*=\s*", "");
+                            object result = expressionParser.Parse(expression, state);
 
-                                if(result is float || result is bool)
-                                    state[bestVAr] = result;
-                                else
-                                    throw new ArgumentException("Assigment did not evaluate to a number or a boolean");
-
-                                break;
-                            }
+                            if(result is float || result is bool)
+                                state[bestVAr] = result;
                             else
-                            {
-                                throw new ArgumentException("Cannot write to the variable '" + bestVAr + "'");
-                            }
+                                throw new ArgumentException("Assigment did not evaluate to a number or a boolean");
+                        }
+                        else
+                        {
+                            throw new ArgumentException("Cannot write to the variable '" + bestVAr + "'");
                         }
                     }
                 }
