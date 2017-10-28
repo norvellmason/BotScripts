@@ -12,7 +12,7 @@ namespace GameplayElements
         Score score;
         World world;
 
-        string winner;
+        public string winner;
 
         public GameplayUpdater(World world)
         {
@@ -27,7 +27,7 @@ namespace GameplayElements
             score.tryGetWinner(out winner);
         }
 
-        private void Reset()
+        public void Reset()
         {
             score.Reset();
             world.ResetBots();

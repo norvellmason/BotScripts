@@ -25,12 +25,12 @@ namespace GameplayElements
 
         public void tryGetWinner(out string winner)
         {
-            if (playerScore > 100)
+            if (playerScore > 1)
             {
                 winner = "Player";
                 return;
             }
-            else if(enemyScore > 100)
+            else if(enemyScore > 1)
             {
                 winner = "Enemy";
                 return;

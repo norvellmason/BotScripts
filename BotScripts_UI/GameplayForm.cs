@@ -17,10 +17,10 @@ namespace BotScripts_UI
         /// </summary>
         public GameplayForm()
         {
-            InitializeComponent();
-            
             world = new World(new Bot(new PointF(50, 300), 0.0f, new Renderable(new List<PointF>(), true)), new Bot(new PointF(350, 200), (float)Math.PI, new Renderable(new List<PointF>(), true)));
             GameUpdater = new GameplayUpdater(world);
+
+            InitializeComponent();            
 
             ResizePanels();
         }
@@ -37,12 +37,29 @@ namespace BotScripts_UI
             world.Update();
             world.Render(e.Graphics);
             GameUpdater.Update();
+            showWinnerIfWinner();
 
             startButton.Update();
+            IntroButton.Update();
+            AcceptedInputsButton.Update();
+            SimpleScriptExampleButton.Update();
+
             PlayerInputTexBox.Update();
+            WinnerTextBox.Update();
 
             System.Threading.Thread.Sleep(16);
             gamePanel.Invalidate();
+        }
+
+        private void showWinnerIfWinner()
+        {
+            if (GameUpdater.winner != "")
+            {
+                WinnerTextBox.Text = "The " + GameUpdater.winner + " wins!";
+                WinnerTextBox.Visible = true;
+
+                //toggleStartOrStop();
+            }
         }
 
         /// <summary>
@@ -78,14 +95,24 @@ namespace BotScripts_UI
 
         private void startButton_Click(object sender, EventArgs e)
         {
+            toggleStartOrStop();
+        }
+
+        private void toggleStartOrStop()
+        {
             if (world.inEditor)
             {
+                if (WinnerTextBox.Visible == true)
+                {
+                    WinnerTextBox.Visible = false;
+                }
+
                 PlayerInputTexBox.ReadOnly = true;
                 startButton.Text = "Stop";
 
                 world.setPlayerCode(PlayerInputTexBox.Lines);
 
-                world.inEditor = false;
+                GameUpdater.Reset();
             }
             else
             {
@@ -93,9 +120,9 @@ namespace BotScripts_UI
                 PlayerInputTexBox.ReadOnly = false;
 
                 world.setPlayerCode(new string[] { "" });
-
-                world.inEditor = true;
             }
+
+            world.inEditor = !world.inEditor;
             ResizePanels();
         }
     }

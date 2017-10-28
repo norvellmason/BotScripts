@@ -19,12 +19,10 @@ namespace Engine
         private float computerBotStartAngle;
 
 
-        public bool inEditor;
+        public bool inEditor = true;
 
         public World(Bot playerBot, Bot computerBot)
         {
-            inEditor = true;
-
             PlayerBot = playerBot;
             ComputerBot = computerBot;
 
@@ -49,6 +47,7 @@ namespace Engine
             };
 
             playerParser = new CodeParser(new String[0], inputVariables, outputVariables);
+            computerParser = new CodeParser(new String[0], inputVariables, outputVariables);
         }
 
         public void setPlayerCode(String[] code)
