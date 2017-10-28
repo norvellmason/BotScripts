@@ -7,7 +7,7 @@ namespace Engine
     /// <summary>
     /// Provides the ability to parse an expression into a value.
     /// </summary>
-    public class ExpressionParse
+    public class ExpressionParser
     {
         /// <summary>
         /// Performs an operation on a single operand. If the opertion cannot be
@@ -64,7 +64,7 @@ namespace Engine
         /// <param name="unaryOperators">the supported unary operators</param>
         /// <param name="infixOperators">the supported infix operators</param>
         /// <param name="variableNames">the supported variable names</param>
-        public ExpressionParse(Dictionary<String, UnaryOperator> unaryOperators, Dictionary<String, InfixOperator> infixOperators, List<String> infixOrder, HashSet<String> variableNames)
+        public ExpressionParser(Dictionary<String, UnaryOperator> unaryOperators, Dictionary<String, InfixOperator> infixOperators, List<String> infixOrder, HashSet<String> variableNames)
         {
             this.unaryOperators = unaryOperators;
             this.infixOperators = infixOperators;
@@ -80,7 +80,7 @@ namespace Engine
         /// parser</param>
         /// 
         /// <returns>the new parser</returns>
-        public static ExpressionParse GetDefaultParser(HashSet<String> variableNames)
+        public static ExpressionParser GetDefaultParser(HashSet<String> variableNames)
         {
             Dictionary<String, UnaryOperator> unaryOperators = new Dictionary<String, UnaryOperator>();
             unaryOperators.Add("-", (operand) => {
@@ -185,7 +185,7 @@ namespace Engine
                 "*", "/", "+", "-", ">", "<", ">=", "<=", "==", "!=", "||", "&&"
             };
 
-            return new ExpressionParse(unaryOperators, infixOperators, infixOrder, variableNames);
+            return new ExpressionParser(unaryOperators, infixOperators, infixOrder, variableNames);
         }
 
         /// <summary>
