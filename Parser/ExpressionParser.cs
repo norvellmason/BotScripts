@@ -31,19 +31,7 @@ namespace Engine
         /// 
         /// <returns>the result of the operation</returns>
         public delegate object InfixOperator(object leftOperand, object rightOperand);
-
-        /// <summary>
-        /// Retrieves the value of a variable using its name. If there is an
-        /// error while getting the value of the variable, an ArgumentException
-        /// should be thrown with a message describing the exception.
-        /// </summary>
-        /// 
-        /// <param name="variableName">the name of the variable to retrive the
-        /// value of</param>
-        /// 
-        /// <returns>the value of the requested variable</returns>
-        public delegate object VariableLookup(String variableName);
-
+        
         // the unary operators supported by this parser
         private Dictionary<String, UnaryOperator> unaryOperators;
 
@@ -198,13 +186,13 @@ namespace Engine
         /// <param name="lookup">the lookup to use</param>
         /// 
         /// <returns>the result of the expression</returns>
-        public object Parse(String expression, VariableLookup lookup)
+        public object Parse(String expression, Dictionary<String, object> state)
         {
             // remove whitespace from the expression
             expression = Regex.Replace(expression, "\\s+", "");
 
             // tokenize the string
-            List<object> tokens = Tokenize(expression, lookup);
+            List<object> tokens = Tokenize(expression, state);
 
             for(int index = 0; index < tokens.Count; index++)
             {
@@ -263,7 +251,7 @@ namespace Engine
         /// <param name="lookup">the lookup to use for variables</param>
         /// 
         /// <returns>the tokens in the expression</returns>
-        private List<object> Tokenize(String expression, VariableLookup lookup)
+        private List<object> Tokenize(String expression, Dictionary<String, object> state)
         {
             List<object> tokens = new List<object>();
             while(expression.Length > 0)
@@ -274,7 +262,7 @@ namespace Engine
                 if(expression[0] == '(')
                 {
                     match = expression.Substring(0, GetClosingParenthesisPosition(expression) + 1);
-                    object result = Parse(match.Substring(1, match.Length - 2), lookup);
+                    object result = Parse(match.Substring(1, match.Length - 2), state);
 
                     if(result is float || result is bool)
                         tokens.Add(result);
@@ -293,22 +281,25 @@ namespace Engine
                     }
                     else if(type == "variable")
                     {
-                        try
-                        {
-                            tokens.Add(lookup(match));
-                        }
-                        catch(ArgumentException ae)
-                        {
-                            throw new ParseException("Failed to retieve value of variable '" + match + "':\n" + ae.Message);
-                        }
+                        if(state.ContainsKey(match))
+                            tokens.Add(state[match]);
+                        else
+                            throw new ParseException("Variable '" + match + "' is undefined");
                     }
                     else
                     {
-                        Match matchResult = Regex.Match(expression, @"(?:^\d+(\.\d+)?)|(?:^\.\d+)");
-                        if(matchResult.Success)
+                        Match doubleResult = Regex.Match(expression, @"(?:^\d+(\.\d+)?)|(?:^\.\d+)");
+                        Match boolResult = Regex.Match(expression, @"^true|^false");
+
+                        if(doubleResult.Success)
                         {
-                            match = matchResult.Value;
+                            match = doubleResult.Value;
                             tokens.Add(float.Parse(match));
+                        }
+                        else if(boolResult.Success)
+                        {
+                            match = boolResult.Value;
+                            tokens.Add(bool.Parse(match));
                         }
                         else
                         {

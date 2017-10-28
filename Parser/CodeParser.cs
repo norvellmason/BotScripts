@@ -15,7 +15,6 @@ namespace Engine
         private HashSet<String> outputVariables;
 
         private ExpressionParser expressionParser;
-        private ExpressionParser.VariableLookup lookup;
 
         /// <summary>
         /// Construct a CodeParser with the given lines and variables.
@@ -26,7 +25,7 @@ namespace Engine
         /// variables</param>
         /// <param name="outputVariables">the names of the output
         /// variables</param>
-        public CodeParser(String[] lines, HashSet<String> inputVariables, HashSet<String> outputVariables, ExpressionParser.VariableLookup lookup)
+        public CodeParser(String[] lines, HashSet<String> inputVariables, HashSet<String> outputVariables)
         {
             this.lines = lines;
 
@@ -37,7 +36,6 @@ namespace Engine
             this.outputVariables = outputVariables;
 
             expressionParser = ExpressionParser.GetDefaultParser(variables);
-            this.lookup = lookup;
         }
 
         public Dictionary<String, object> Execute(Dictionary<String, object> state)
@@ -46,9 +44,7 @@ namespace Engine
             ControlBlock lastBlock = null;
 
             blocks.Push(new ControlBlock(-1, true));
-
-            Dictionary<String, object> changes = new Dictionary<String, object>();
-
+            
             foreach(String line in lines)
             {
                 int depth = GetLineDepth(line);
@@ -62,7 +58,7 @@ namespace Engine
                 {
                     if(statement.IndexOf("if") == 0)
                     {
-                        object expression = expressionParser.Parse(statement.Substring(2), lookup);
+                        object expression = expressionParser.Parse(statement.Substring(2), state);
                         if(expression is bool execute)
                             blocks.Push(new ControlBlock(depth, execute));
                         else
@@ -75,10 +71,10 @@ namespace Engine
                             if(statement.IndexOf(name) == 0)
                             {
                                 String expression = Regex.Replace(statement.Substring(name.Length), @"\s*=\s*", "");
-                                object result = expressionParser.Parse(expression, lookup);
+                                object result = expressionParser.Parse(expression, state);
 
                                 if(result is float || result is bool)
-                                    changes[name] = result;
+                                    state[name] = result;
                                 else
                                     throw new ArgumentException("Assigment did not evaluate to a number or a boolean");
 
@@ -89,7 +85,7 @@ namespace Engine
                 }
             }
 
-            return changes;
+            return state;
         }
 
         private int GetLineDepth(String line)
