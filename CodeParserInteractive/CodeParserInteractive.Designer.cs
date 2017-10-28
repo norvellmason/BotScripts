@@ -38,6 +38,7 @@
             this.executeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.generateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.botGenerateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.botModifyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -94,7 +95,8 @@
             this.codeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.executeToolStripMenuItem,
             this.generateToolStripMenuItem,
-            this.botGenerateToolStripMenuItem});
+            this.botGenerateToolStripMenuItem,
+            this.botModifyToolStripMenuItem});
             this.codeToolStripMenuItem.Name = "codeToolStripMenuItem";
             this.codeToolStripMenuItem.Size = new System.Drawing.Size(66, 29);
             this.codeToolStripMenuItem.Text = "Code";
@@ -122,6 +124,14 @@
             this.botGenerateToolStripMenuItem.Size = new System.Drawing.Size(259, 30);
             this.botGenerateToolStripMenuItem.Text = "Bot Generate";
             this.botGenerateToolStripMenuItem.Click += new System.EventHandler(this.botGenerateToolStripMenuItem_Click);
+            // 
+            // botModifyToolStripMenuItem
+            // 
+            this.botModifyToolStripMenuItem.Name = "botModifyToolStripMenuItem";
+            this.botModifyToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.M)));
+            this.botModifyToolStripMenuItem.Size = new System.Drawing.Size(259, 30);
+            this.botModifyToolStripMenuItem.Text = "Bot Modify";
+            this.botModifyToolStripMenuItem.Click += new System.EventHandler(this.botModifyToolStripMenuItem_Click);
             // 
             // CodeParserInteractive
             // 
@@ -152,6 +162,7 @@
         private System.Windows.Forms.ToolStripMenuItem executeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem generateToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem botGenerateToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem botModifyToolStripMenuItem;
     }
 }
 

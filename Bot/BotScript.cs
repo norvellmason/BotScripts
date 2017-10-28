@@ -34,6 +34,19 @@ namespace Engine
 
             return lines.ToArray();
         }
+
+        public void Mutate()
+        {
+            for(int index = 0; index < lines.Count; index++)
+            {
+                lines[index].Mutate(variables, outputs, operators);
+
+                if(Line.random.NextDouble() < 0.01)
+                    lines.Insert(index++, new Line(variables, outputs, operators));
+                else if(Line.random.NextDouble() < 0.01)
+                    lines.RemoveAt(index--);
+            }
+        }
     }
 
     class Line
@@ -43,7 +56,7 @@ namespace Engine
         List<String> operands = new List<String>();
         List<String> operators = new List<String>();
 
-        private static Random random = new Random();
+        public static Random random = new Random();
 
         public Line(List<String> variables, List<String> outputs, List<String> operators)
         {
@@ -59,6 +72,39 @@ namespace Engine
             }
 
             operands.Add(GetOperand(variables));
+        }
+
+        public void Mutate(List<String> variables, List<String> outputs, List<String> operators)
+        {
+            if(random.NextDouble() < 0.1)
+                depth = Math.Max(0, depth + random.Next(5) - 2);
+
+            if(random.NextDouble() < 0.3)
+                head = GenerateHeader(outputs);
+
+            for(int index = 0; index < this.operators.Count; index++)
+            {
+                if(random.NextDouble() < 0.1)
+                    operators[index] = operators[random.Next(operators.Count)];
+
+                if(random.NextDouble() < 0.1)
+                    operands[index] = GetOperand(variables);
+
+                if(random.NextDouble() < 0.05)
+                {
+                    operators.Insert(index, operators[random.Next(operators.Count)]);
+                    operands.Insert(index, GetOperand(variables));
+
+                    index++;
+                }
+                else if(random.NextDouble() < 0.05)
+                {
+                    operators.RemoveAt(index);
+                    operands.RemoveAt(index);
+
+                    index--;
+                }
+            }
         }
 
         public override string ToString()
