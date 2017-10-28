@@ -31,7 +31,19 @@ namespace Engine
                 "control.backward",
             };
 
+            HashSet<String> variables = new HashSet<String>();
+            variables.UnionWith(inputVariables);
+            variables.UnionWith(outputVariables);
+
+            HashSet<String> operators = new HashSet<String>() {
+                "*", "/", "+", "-", ">", ">=", "<", "<=", "==", "!=", "!", "&&", "||"
+            };
+
             playerParser = new CodeParser(new String[0], inputVariables, outputVariables);
+
+            BotScript computerScript = new BotScript(variables, outputVariables, operators, 50);
+
+            computerParser = new CodeParser(new String[0], inputVariables, outputVariables);
         }
 
         public void setPlayerCode(String[] code)

@@ -79,6 +79,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Bot\Bot.csproj">
+      <Project>{bbd00c5a-7c52-4506-9765-6021fec024b4}</Project>
+      <Name>Bot</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Parser\Parser.csproj">
       <Project>{6453e477-b52b-4c9a-ab0d-c58609ed9e53}</Project>
       <Name>Parser</Name>

@@ -14,6 +14,8 @@ namespace CodeParserInteractive
 {
     public partial class CodeParserInteractive : Form
     {
+        public static List<String> OPERATORS = new List<String>() { "*", "/", "+", "-", ">", "<", ">=", "<=", "==", "!=", "||", "&&" };
+
         public CodeParserInteractive()
         {
             InitializeComponent();
@@ -64,6 +66,57 @@ namespace CodeParserInteractive
                 output += pair.Key + " = " + pair.Value + Environment.NewLine;
 
             variableOutput.Text = output;
+        }
+
+        private void generateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Dictionary<String, object> inputs = ParseInputs(variableInput.Text);
+
+            codeInput.Text = GenerateAssignment(new List<String>(inputs.Keys));
+        }
+
+        private String GenerateAssignment(List<String> vars)
+        {
+            Random random = new Random();
+
+            return vars[random.Next(vars.Count)] + " = " + GenerateExpression(vars, OPERATORS);
+        }
+
+        private String GenerateExpression(List<String> vars, List<String> ops)
+        {
+            Random random = new Random();
+            int length = random.Next(10);
+
+            String expression = "";
+            while(--length > 0)
+            {
+                if(random.NextDouble() < 0.5)
+                    expression += vars[random.Next(vars.Count)];
+                else
+                    expression += ((float)random.NextDouble() - 0.5) * 10;
+
+                expression += " " + ops[random.Next(ops.Count)] + " ";
+            }
+            
+            if(random.NextDouble() < 0.5)
+                expression += vars[random.Next(vars.Count)];
+            else
+                expression += ((float)random.NextDouble() - 0.5) * 10;
+
+            return expression;
+        }
+
+        private void botGenerateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Dictionary<String, object> inputs = ParseInputs(variableInput.Text);
+
+            BotScript computerScript = new BotScript(inputs.Keys, inputs.Keys, OPERATORS, 1000);
+
+            codeInput.Text = "";
+            foreach(String line in computerScript.getLines())
+            {
+                codeInput.Text += line + Environment.NewLine;
+            }
         }
     }
 }

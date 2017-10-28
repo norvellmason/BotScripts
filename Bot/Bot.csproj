@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Bot.cs" />
+    <Compile Include="BotScript.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Renderable.cs" />
     <Compile Include="World.cs" />

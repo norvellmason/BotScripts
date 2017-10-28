@@ -65,52 +65,74 @@ namespace Engine
                         object expression = expressionParser.Parse(statement.Substring(2), state);
                         if(expression is bool execute)
                             blocks.Push(new ControlBlock(depth, execute, execute));
+                        else if(expression is float value)
+                            blocks.Push(new ControlBlock(depth, value > 0, value > 0));
                         else
                             throw new ArgumentException("If statment expression evaluated to number, needs to be boolean");
                     }
                     else if(statement.IndexOf("elseif ") == 0)
                     {
-                        if(lastBlock != null && !lastBlock.ChainExecute && lastBlock.Depth == depth)
+                        if(lastBlock != null)
                         {
-                            object expression = expressionParser.Parse(statement.Substring(7), state);
-                            if(expression is bool execute)
-                                blocks.Push(new ControlBlock(depth, execute, execute | lastBlock.ChainExecute));
+                            if(!lastBlock.ChainExecute && lastBlock.Depth == depth)
+                            {
+                                object expression = expressionParser.Parse(statement.Substring(7), state);
+                                if(expression is bool execute)
+                                    blocks.Push(new ControlBlock(depth, execute, execute | lastBlock.ChainExecute));
+                                if(expression is float value)
+                                    blocks.Push(new ControlBlock(depth, value > 0, value > 0 | lastBlock.ChainExecute));
+                                else
+                                    throw new ArgumentException("If statment expression evaluated to number, needs to be boolean");
+                            }
                             else
-                                throw new ArgumentException("If statment expression evaluated to number, needs to be boolean");
+                            {
+                                blocks.Push(new ControlBlock(depth, false, lastBlock.ChainExecute));
+                            }
                         }
                         else
                         {
-                            blocks.Push(new ControlBlock(depth, false, lastBlock.ChainExecute));
+                            blocks.Push(new ControlBlock(depth, false, false));
                         }
                     }
                     else if(statement.IndexOf("else") == 0)
                     {
-                        if(lastBlock != null && !lastBlock.ChainExecute && lastBlock.Depth == depth)
-                            blocks.Push(new ControlBlock(depth, !lastBlock.Execute, false));
+                        if(lastBlock != null)
+                        {
+                            if(!lastBlock.ChainExecute && lastBlock.Depth == depth)
+                                blocks.Push(new ControlBlock(depth, !lastBlock.Execute, false));
+                            else
+                                blocks.Push(new ControlBlock(depth, false, lastBlock.ChainExecute));
+                        }
                         else
-                            blocks.Push(new ControlBlock(depth, false, lastBlock.ChainExecute));
+                        {
+                            blocks.Push(new ControlBlock(depth, false, false));
+                        }
                     }
                     else
                     {
+                        String bestVAr = "";
                         foreach(String name in variables)
-                        { 
-                            if(statement.IndexOf(name) == 0)
-                            {
-                                if(outputVariables.Contains(name)) {
-                                    String expression = Regex.Replace(statement.Substring(name.Length), @"\s*=\s*", "");
-                                    object result = expressionParser.Parse(expression, state);
+                        {
+                            if(statement.IndexOf(name) == 0 && name.Length > bestVAr.Length)
+                                bestVAr = name;
+                        }
+                        
+                        if(statement.IndexOf(bestVAr) == 0)
+                        {
+                            if(outputVariables.Contains(bestVAr)) {
+                                String expression = Regex.Replace(statement.Substring(bestVAr.Length), @"^\s*=\s*", "");
+                                object result = expressionParser.Parse(expression, state);
 
-                                    if(result is float || result is bool)
-                                        state[name] = result;
-                                    else
-                                        throw new ArgumentException("Assigment did not evaluate to a number or a boolean");
-
-                                    break;
-                                }
+                                if(result is float || result is bool)
+                                    state[bestVAr] = result;
                                 else
-                                {
-                                    throw new ArgumentException("Cannot write to the variable '" + name + "'");
-                                }
+                                    throw new ArgumentException("Assigment did not evaluate to a number or a boolean");
+
+                                break;
+                            }
+                            else
+                            {
+                                throw new ArgumentException("Cannot write to the variable '" + bestVAr + "'");
                             }
                         }
                     }

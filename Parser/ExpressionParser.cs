@@ -75,13 +75,19 @@ namespace Engine
                 if(operand is float)
                     return -(float)operand;
 
-                throw new ArgumentException("A boolean cannot be negated");
+                if(operand is bool)
+                    return !(bool)operand;
+
+                throw new ArgumentException("Unknown datatype");
             });
             unaryOperators.Add("!", (operand) => {
                 if(operand is bool)
                     return !(bool)operand;
 
-                throw new ArgumentException("A number cannot be inverted");
+                if(operand is float)
+                    return -(float)operand;
+
+                throw new ArgumentException("Unknown datatype");
             });
 
             Dictionary<String, InfixOperator> infixOperators = new Dictionary<String, InfixOperator>();
@@ -89,7 +95,16 @@ namespace Engine
                 if(left is float && right is float)
                     return (float)left * (float)right;
 
-                throw new ArgumentException("Only numbers can be multiplied");
+                if(left is bool && right is float)
+                    return (bool)left ? right : 0f;
+
+                if(left is float && right is bool)
+                    return (bool)right ? left : 0f;
+
+                if(left is bool && right is bool)
+                    return (bool)left && (bool)right;
+
+                throw new ArgumentException("Unknown datatype");
             });
             infixOperators.Add("/", (left, right) => {
                 if(left is float && right is float)
@@ -97,76 +112,183 @@ namespace Engine
                     if((float)right == 0)
                         throw new ArgumentException("Cannot divide by zero");
 
+
                     return (float)left / (float)right;
                 }
 
-                throw new ArgumentException("Only numbers can be divided");
+                if(left is float && right is bool)
+                {
+                    if(!(bool)right)
+                        return false;
+
+                    return (float)left;
+                }
+
+                if(left is bool && right is float)
+                    return (bool)left ? 1f / (float)right : 0f;
+
+                if(left is bool && right is bool)
+                {
+                    if(!(bool)right)
+                        return false;
+
+                    return (bool)left;
+                }
+                    
+
+                throw new ArgumentException("Unknown datatype");
             });
             infixOperators.Add("+", (left, right) => {
                 if(left is float && right is float)
                     return (float)left + (float)right;
 
-                throw new ArgumentException("Only numbers can be added");
+                if(left is float && right is bool)
+                    return (float)left;
+
+                if(left is bool && right is float)
+                    return (float)right;
+
+                if(left is bool && right is bool)
+                    return (bool)left || (bool)right;
+
+                throw new ArgumentException("Unknown datatype");
             });
             infixOperators.Add("-", (left, right) => {
                 if(left is float && right is float)
                     return (float)left + (float)right;
 
-                throw new ArgumentException("Only numbers can be subtracted");
+                if(left is float && right is bool)
+                    return (float)left;
+
+                if(left is bool && right is float)
+                    return (float)right;
+
+                if(left is bool && right is bool)
+                    return !((bool)left || (bool)right);
+
+                throw new ArgumentException("Unknown datatype");
             });
 
             infixOperators.Add(">", (left, right) => {
                 if(left is float && right is float)
                     return (float)left > (float)right;
 
-                throw new ArgumentException("Only numbers can be ordered");
+                if(left is float && right is bool)
+                    return (float)left > 0 && !(bool)right;
+
+                if(left is bool && right is float)
+                    return (bool)left && !((float)right > 0);
+
+                if(left is bool && right is bool)
+                    return (bool)left && !(bool)right;
+
+                throw new ArgumentException("Unknown datatype");
             });
             infixOperators.Add("<", (left, right) => {
                 if(left is float && right is float)
                     return (float)left < (float)right;
 
-                throw new ArgumentException("Only numbers can be ordered");
+                if(left is float && right is bool)
+                    return !((float)left > 0) && (bool)right;
+
+                if(left is bool && right is float)
+                    return !(bool)left && (float)right > 0;
+
+                if(left is bool && right is bool)
+                    return !(bool)left && (bool)right;
+
+                throw new ArgumentException("Unknown datatype");
             });
             infixOperators.Add(">=", (left, right) => {
                 if(left is float && right is float)
                     return (float)left >= (float)right;
 
-                throw new ArgumentException("Only numbers can be ordered");
+                if(left is float && right is bool)
+                    return (float)left > 0 || (((float)left > 0) ^ (bool)right);
+
+                if(left is bool && right is float)
+                    return (bool)left || ((bool)left ^ ((float)right > 0));
+
+                if(left is bool && right is bool)
+                    return (bool)left || ((bool)left ^ (bool)right);
+
+                throw new ArgumentException("Unknown datatype");
             });
             infixOperators.Add("<=", (left, right) => {
                 if(left is float && right is float)
                     return (float)left <= (float)right;
 
-                throw new ArgumentException("Only numbers can be ordered");
+                if(left is float && right is bool)
+                    return (bool)right || ((float)left > 0 ^ (bool)right);
+
+                if(left is bool && right is float)
+                    return (float)right > 0 || ((bool)left ^ (float)right > 0);
+
+                if(left is bool && right is bool)
+                    return (bool)right || ((bool)left ^ (bool)right);
+
+                throw new ArgumentException("Unknown datatype");
             });
             infixOperators.Add("==", (left, right) => {
                 if(left is float && right is float)
                     return (float)left == (float)right;
-                else if(left is bool && right is bool)
+
+                if(left is float && right is bool)
+                    return (float)left > 0 == (bool)right;
+
+                if(left is bool && right is float)
+                    return (bool)left == (float)right > 0;
+
+                if(left is bool && right is bool)
                     return (bool)left == (bool)right;
 
-                throw new ArgumentException("Cannot compare bools and numbers");
+                throw new ArgumentException("Unknown datatype");
             });
             infixOperators.Add("!=", (left, right) => {
                 if(left is float && right is float)
                     return (float)left != (float)right;
-                else if(left is bool && right is bool)
+
+                if(left is float && right is bool)
+                    return (float)left > 0 != (bool)right;
+
+                if(left is bool && right is float)
+                    return (bool)left != (float)right > 0;
+
+                if(left is bool && right is bool)
                     return (bool)left != (bool)right;
 
-                throw new ArgumentException("Cannot compare bools and numbers");
+                throw new ArgumentException("Unknown datatype");
             });
 
             infixOperators.Add("||", (left, right) => {
+                if(left is float && right is float)
+                    return (float)left > 0 || (float)right > 0;
+
+                if(left is float && right is bool)
+                    return (float)left > 0 || (bool)right;
+
+                if(left is bool && right is float)
+                    return (bool)left || (float)right > 0;
+
                 if(left is bool && right is bool)
                     return (bool)left || (bool)right;
 
-                throw new ArgumentException("Cannot and together ");
+                throw new ArgumentException("Unknown datatype");
             });
             infixOperators.Add("&&", (left, right) => {
+                if(left is float && right is float)
+                    return (float)left > 0 && (float)right > 0;
+
+                if(left is float && right is bool)
+                    return (float)left > 0 && (bool)right;
+
+                if(left is bool && right is float)
+                    return (bool)left && (float)right > 0;
+                
                 if(left is bool && right is bool)
                     return (bool)left && (bool)right;
 
-                throw new ArgumentException("Cannot and together ");
+                throw new ArgumentException("Unknown datatype");
             });
 
             List<String> infixOrder = new List<String>() {
@@ -240,7 +362,7 @@ namespace Engine
             if(tokens.Count == 1)
                 return tokens[0];
 
-            throw new ParseException("Expression did not properly evaluate");
+            throw new ParseException("Expression did not properly evaluate: " + tokens.Count);
         }
 
         /// <summary>
