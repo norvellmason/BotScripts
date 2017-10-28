@@ -88,19 +88,25 @@ namespace Engine
                     }
                     else
                     {
-                        foreach(String name in outputVariables)
+                        foreach(String name in variables)
                         { 
                             if(statement.IndexOf(name) == 0)
                             {
-                                String expression = Regex.Replace(statement.Substring(name.Length), @"\s*=\s*", "");
-                                object result = expressionParser.Parse(expression, state);
+                                if(outputVariables.Contains(name)) {
+                                    String expression = Regex.Replace(statement.Substring(name.Length), @"\s*=\s*", "");
+                                    object result = expressionParser.Parse(expression, state);
 
-                                if(result is float || result is bool)
-                                    state[name] = result;
+                                    if(result is float || result is bool)
+                                        state[name] = result;
+                                    else
+                                        throw new ArgumentException("Assigment did not evaluate to a number or a boolean");
+
+                                    break;
+                                }
                                 else
-                                    throw new ArgumentException("Assigment did not evaluate to a number or a boolean");
-                                
-                                break;
+                                {
+                                    throw new ArgumentException("Cannot write to the variable '" + name + "'");
+                                }
                             }
                         }
                     }

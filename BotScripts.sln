@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BotScripts_UI", "BotScripts
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parser", "Parser\Parser.csproj", "{6453E477-B52B-4C9A-AB0D-C58609ED9E53}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeParserInteractive", "CodeParserInteractive\CodeParserInteractive.csproj", "{AFA9A4E3-477F-4050-903C-8C4024B1F183}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{6453E477-B52B-4C9A-AB0D-C58609ED9E53}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6453E477-B52B-4C9A-AB0D-C58609ED9E53}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6453E477-B52B-4C9A-AB0D-C58609ED9E53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFA9A4E3-477F-4050-903C-8C4024B1F183}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFA9A4E3-477F-4050-903C-8C4024B1F183}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFA9A4E3-477F-4050-903C-8C4024B1F183}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFA9A4E3-477F-4050-903C-8C4024B1F183}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
