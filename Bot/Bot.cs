@@ -41,7 +41,7 @@ namespace Engine
             Position = new PointF(x, y);
             Angle = angle;
             Renderable = renderable;
-            SetRenderable();
+            CreateBotRenderable(12, 50f, 50f);
         }
 
         /// <summary>
@@ -56,11 +56,20 @@ namespace Engine
             Position = position;
             Angle = angle;
             Renderable = renderable;
-            SetRenderable();
+            CreateBotRenderable(12, 30f, 30f);
         }
 
-        public void SetRenderable()
+        public void CreateBotRenderable(int numPoints, float radius, float spikeLength)
         {
+            Renderable.points.Add(new PointF(radius + spikeLength, 0));
+
+            for(int i = 1; i < numPoints; i++)
+            {
+                float angle = (float)((i * 2 * Math.PI) / numPoints);
+
+                Renderable.points.Add(new PointF((float)Math.Cos(angle) * radius, (float)Math.Sin(angle) * radius));
+            }
+
 
         }
     }

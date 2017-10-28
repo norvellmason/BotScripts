@@ -17,6 +17,9 @@ namespace BotScripts_UI
         Bot testBot2;
         List<Bot> botsToRender = new List<Bot>();
 
+        Bitmap bitmap;
+        Graphics g;
+
         /// <summary>
         /// Initializes Form and bots
         /// </summary>
@@ -25,11 +28,14 @@ namespace BotScripts_UI
             InitializeComponent();
 
 
-            testBot = new Bot(new PointF(300, 300), 0.0f, new Renderable(new List<PointF> { new PointF(100, 100), new PointF(-100, -100) }, false));
-            testBot2 = new Bot(new PointF(100, 100), 0.0f, new Renderable(new List<PointF> { new PointF(100, 100), new PointF(-100, -100) }, false));
+            testBot  = new Bot(new PointF(300, 300), 0.0f, new Renderable(new List<PointF>(), true));
+            testBot2 = new Bot(new PointF(100, 100), 0.0f, new Renderable(new List<PointF>() , true));
 
             botsToRender.Add(testBot);
             botsToRender.Add(testBot2);
+
+            bitmap = new Bitmap(Width, Height);
+            g = Graphics.FromImage(bitmap);
         }
 
         private float angle = 0;
@@ -42,14 +48,16 @@ namespace BotScripts_UI
         /// <param name="e"></param>
         private void GameplayForm_Paint(object sender, PaintEventArgs e)
         {
-            e.Graphics.Clear(Color.White);
+            g.Clear(Color.White);
 
             foreach (Bot bot in botsToRender)
             {
-                bot.Renderable.Render(bot.Position, angle, Color.Black, e.Graphics);
+                bot.Renderable.Render(bot.Position, angle, Color.Black, g);
             }
 
-            System.Threading.Thread.Sleep(33);
+            e.Graphics.DrawImage(bitmap, 0, 0);
+
+            System.Threading.Thread.Sleep(16);
             Invalidate();
         }
     }
