@@ -39,27 +39,23 @@ namespace Engine
         /// <param name="g">graphics object used to render renderable</param>
         public void Render(PointF position, float angle, Color color, Graphics g)
         {
-            Pen pen = new Pen(color, 3);
-
-            List<PointF> matrix = new List<PointF> { new PointF((float)Math.Cos(angle), -(float)Math.Sin(angle)),
-                                                     new PointF((float)Math.Sin(angle),  (float)Math.Cos(angle))};
+            // 2d rotation matrix
+            float[][] matrix = { new float[] { (float)Math.Cos(angle), -(float)Math.Sin(angle) },
+                                 new float[] { (float)Math.Sin(angle),  (float)Math.Cos(angle) } };
 
             List<PointF> onScreenPoints = new List<PointF>();
-
-            for (int i = 0; i < points.Count; i++)
+            foreach(PointF point in points)
             {
-                PointF point = points[i];
-
-                float xOffSet = matrix[0].X * point.X + matrix[0].Y * point.Y;
-                float yOffSet = matrix[1].X * point.X + matrix[1].Y * point.Y;
+                float xOffSet = matrix[0][0] * point.X + matrix[0][1] * point.Y;
+                float yOffSet = matrix[1][0] * point.X + matrix[1][1] * point.Y;
 
                 onScreenPoints.Add(new PointF(position.X + xOffSet, position.Y - yOffSet));
             }
 
-            for (int i = 1; i < points.Count; i++)
-            {
-                g.DrawLine(pen, onScreenPoints[i-1], onScreenPoints[i]);
-            }
+            // draw the points on screen
+            Pen pen = new Pen(color, 3);
+            for(int i = 1; i < points.Count; i++)
+                g.DrawLine(pen, onScreenPoints[i - 1], onScreenPoints[i]);
 
             if (closed)
                 g.DrawLine(pen, onScreenPoints[onScreenPoints.Count - 1], onScreenPoints[0]);
