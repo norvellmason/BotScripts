@@ -66,12 +66,21 @@ namespace BotScripts_UI
 
         private void startButton_Click(object sender, EventArgs e)
         {
-            startButton.Enabled = false;
-            PlayerInputTexBox.ReadOnly = true;
+            if (startButton.Text == "Fight")
+            {
+                PlayerInputTexBox.ReadOnly = true;
+                startButton.Text = "Stop";
 
-            String[] parsedCode = PlayerInputTexBox.Text.Split('\n');
+                String[] parsedCode = PlayerInputTexBox.Text.Split('\n');
+                world.setPlayerCode(parsedCode);
+            }
+            else
+            {
+                startButton.Text = "Fight";
+                PlayerInputTexBox.ReadOnly = false;
 
-
+                world.setPlayerCode(new string[] { "" });
+            }
         }
     }
 }
