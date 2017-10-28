@@ -69,8 +69,6 @@ namespace Engine
 
                 Renderable.points.Add(new PointF((float)Math.Cos(angle) * radius, (float)Math.Sin(angle) * radius));
             }
-
-
         }
     }
 }

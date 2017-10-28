@@ -17,9 +17,6 @@ namespace BotScripts_UI
         Bot testBot2;
         List<Bot> botsToRender = new List<Bot>();
 
-        Bitmap bitmap;
-        Graphics g;
-
         /// <summary>
         /// Initializes Form and bots
         /// </summary>
@@ -27,15 +24,17 @@ namespace BotScripts_UI
         {
             InitializeComponent();
 
-
             testBot  = new Bot(new PointF(50, 300), 0.0f, new Renderable(new List<PointF>(), true));
             testBot2 = new Bot(new PointF(350, 300), (float)Math.PI, new Renderable(new List<PointF>() , true));
 
             botsToRender.Add(testBot);
             botsToRender.Add(testBot2);
 
-            bitmap = new Bitmap(Width - 400, 672);
-            g = Graphics.FromImage(bitmap);
+            PlayerPanel.Width = Width / 4;
+            PlayerPanel.Height = Height;
+
+            BotPanel.Width = Width / 4;
+            BotPanel.Height = Height;
         }
 
         /// <summary>
@@ -46,17 +45,24 @@ namespace BotScripts_UI
         /// <param name="e"></param>
         private void GameplayForm_Paint(object sender, PaintEventArgs e)
         {
-            g.Clear(Color.White);
+            e.Graphics.Clear(Color.White);
 
             foreach (Bot bot in botsToRender)
             {
-                bot.Renderable.Render(bot.Position, bot.Angle, Color.Black, g);
+                bot.Renderable.Render(new PointF(bot.Position.X + Width / 4, bot.Position.Y), bot.Angle, Color.Black, e.Graphics);
             }
-
-            e.Graphics.DrawImage(bitmap, 200, 0);
 
             System.Threading.Thread.Sleep(16);
             Invalidate();
+        }
+
+        private void GameplayForm_Resize(object sender, EventArgs e)
+        {
+            PlayerPanel.Width = Width / 4;
+            PlayerPanel.Height = Height;
+
+            BotPanel.Width = Width / 4;
+            BotPanel.Height = Height;
         }
     }
 }
