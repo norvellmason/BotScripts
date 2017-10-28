@@ -18,7 +18,7 @@ namespace BotScripts_UI
             InitializeComponent();
             
             world = new World(new Bot(new PointF(50, 300), 0.0f, new Renderable(new List<PointF>(), true)), new Bot(new PointF(350, 200), (float)Math.PI, new Renderable(new List<PointF>(), true)));
-
+            
             ResizePanels();
         }
 

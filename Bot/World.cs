@@ -7,36 +7,41 @@ namespace Engine
     public class World
     {
         public Bot PlayerBot { get; private set; }
-
-        private CodeParser parser;
-
         public Bot ComputerBot { get; private set; }
+
+        private CodeParser playerParser;
+        private CodeParser computerParser;
 
         public World(Bot playerBot, Bot computerBot)
         {
             PlayerBot = playerBot;
             ComputerBot = computerBot;
 
-            String[] lines =
-            {
-                "movement.left = true",
-            };
-
-            HashSet<String> inputVariables = new HashSet<String>()
-            {
+            HashSet<String> inputVariables = new HashSet<String>() {
                 "eyes.left",
+                "eyes.left.distance",
                 "eyes.right",
+                "eyes.right.distance"
             };
 
-            HashSet<String> outputVariables = new HashSet<String>()
-            {
-                "movement.left",
-                "movement.right",
-                "movement.forward",
-                "movement.backward",
+            HashSet<String> outputVariables = new HashSet<String>() {
+                "control.left",
+                "control.right",
+                "control.forward",
+                "control.backward",
             };
 
-            parser = new CodeParser(lines, inputVariables, outputVariables);
+            playerParser = new CodeParser(new String[0], inputVariables, outputVariables);
+        }
+
+        public void setPlayerCode(String[] code)
+        {
+            playerParser.SetCode(code);
+        }
+
+        public void setComputerCode(String[] code)
+        {
+            computerParser.SetCode(code);
         }
 
         private Dictionary<String, object> GetBotInputs(Bot from, Bot target)
@@ -49,15 +54,43 @@ namespace Engine
 
             float relativeAngle = NormalizeAngle(target.Angle - from.Angle);
 
+            // // //
+
+            bool leftEye = angleTo < 0.5 || angleTo > 2 * Math.PI - 0.1;
+            bool rightEye = angleTo > 2 * Math.PI - 0.5 || angleTo < 0.1;
+
+            object leftDistance;
+            if(leftEye)
+                leftDistance = distance;
+            else
+                leftDistance = false;
+
+            object rightDistance;
+            if(rightEye)
+                rightDistance = distance;
+            else
+                rightDistance = false;
+
             return new Dictionary<String, object> {
-                ["eyes.left"] = angleTo < 0.5 || angleTo > 2 * Math.PI - 0.1,
-                ["eyes.right"] = angleTo > 2 * Math.PI - 0.5 || angleTo < 0.1,
+                ["eyes.left"] = leftEye,
+                ["eyes.left.distance"] = leftDistance,
+                ["eyes.right"] = rightEye,
+                ["eyes.right.distance"] = rightDistance,
             };
         }
 
         public void Update()
         {
-            Dictionary<String, object> state = GetBotInputs(PlayerBot, ComputerBot);
+            UpdateBot(playerParser, PlayerBot, ComputerBot);
+            UpdateBot(computerParser, ComputerBot, PlayerBot);
+        }
+
+        public void UpdateBot(CodeParser parser, Bot from, Bot target)
+        {
+            if(parser == null)
+                return;
+
+            Dictionary<String, object> state = GetBotInputs(from, target);
             state["control.left"] = false;
             state["control.right"] = false;
             state["control.forward"] = false;
@@ -65,13 +98,21 @@ namespace Engine
 
             Dictionary<String, object> result = parser.Execute(state);
 
-            if(result["control.left"] is bool turnLeft)
-            {
-                if(turnLeft)
-                {
-                    PlayerBot.Angle = PlayerBot.Angle + 1f;
-                }
-            }
+            bool turnLeft = state["control.left"] is bool && (bool)state["control.left"];
+            bool turnRight = state["control.right"] is bool && (bool)state["control.right"];
+
+            if(turnLeft && !turnRight)
+                from.Angle += 0.01f;
+            if(turnRight && !turnLeft)
+                from.Angle -= 0.01f;
+
+            bool moveforward = state["control.forward"] is bool && (bool)state["control.forward"];
+            bool moveBackward = state["control.backward"] is bool && (bool)state["control.backward"];
+
+            if(moveforward && !moveBackward)
+                from.Position = new PointF(from.Position.X + (float)Math.Cos(from.Angle) * 4, from.Position.Y - (float)Math.Sin(from.Angle) * 4);
+            if(moveBackward && !moveforward)
+                from.Position = new PointF(from.Position.X - (float)Math.Cos(from.Angle) * 4, from.Position.Y + (float)Math.Sin(from.Angle) * 4);
         }
 
         private float NormalizeAngle(float angle)
