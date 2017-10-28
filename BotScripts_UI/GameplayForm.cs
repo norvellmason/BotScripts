@@ -18,7 +18,7 @@ namespace BotScripts_UI
             InitializeComponent();
             
             world = new World(new Bot(new PointF(50, 300), 0.0f, new Renderable(new List<PointF>(), true)), new Bot(new PointF(350, 200), (float)Math.PI, new Renderable(new List<PointF>(), true)));
-            
+
             ResizePanels();
         }
 
@@ -29,7 +29,7 @@ namespace BotScripts_UI
         /// 
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void GameplayForm_Paint(object sender, PaintEventArgs e)
+        private void GameForm_Paint(object sender, PaintEventArgs e)
         {
             world.Update();
             world.Render(e.Graphics);
@@ -38,7 +38,7 @@ namespace BotScripts_UI
             PlayerInputTexBox.Update();
 
             System.Threading.Thread.Sleep(16);
-            panel1.Invalidate();
+            gamePanel.Invalidate();
         }
 
         /// <summary>
