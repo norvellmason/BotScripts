@@ -34,6 +34,8 @@ namespace BotScripts_UI
             world.Update();
             world.Render(e.Graphics);
 
+            startButton.Update();
+
             System.Threading.Thread.Sleep(16);
             panel1.Invalidate();
         }
@@ -60,6 +62,16 @@ namespace BotScripts_UI
         private void GameplayForm_Resize(object sender, EventArgs e)
         {
             ResizePanels();
+        }
+
+        private void startButton_Click(object sender, EventArgs e)
+        {
+            startButton.Enabled = false;
+            PlayerInputTexBox.ReadOnly = true;
+
+            String[] parsedCode = PlayerInputTexBox.Text.Split('\n');
+
+
         }
     }
 }
