@@ -12,7 +12,10 @@ namespace CodeParserTests
         public void GenericTest()
         {
             String[] lines = {
-                "out.value = 5.4"
+                "if eyes.right && eyes.left",
+                " out.value = 5.4",
+                "else",
+                " out.value = -10"
             };
 
             HashSet<String> input = new HashSet<String>() {
@@ -25,9 +28,9 @@ namespace CodeParserTests
             };
 
             Dictionary<String, object> state = new Dictionary<String, object>() {
-                ["eyes.right"] = true,
-                ["eyes.left"] = false,
-                ["out.value"] = false
+                ["eyes.right"] = false,
+                ["eyes.left"] = true,
+                ["out.value"] = 0f
             };
 
             CodeParser parser = new CodeParser(lines, input, output);

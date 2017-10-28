@@ -43,7 +43,7 @@ namespace Engine
             Stack<ControlBlock> blocks = new Stack<ControlBlock>();
             ControlBlock lastBlock = null;
 
-            blocks.Push(new ControlBlock(-1, true));
+            blocks.Push(new ControlBlock(-1, true, false));
             
             foreach(String line in lines)
             {
@@ -56,13 +56,35 @@ namespace Engine
 
                 if(blocks.Peek().Execute)
                 {
-                    if(statement.IndexOf("if") == 0)
+                    if(statement.IndexOf("if ") == 0)
                     {
                         object expression = expressionParser.Parse(statement.Substring(2), state);
                         if(expression is bool execute)
-                            blocks.Push(new ControlBlock(depth, execute));
+                            blocks.Push(new ControlBlock(depth, execute, execute));
                         else
                             throw new ArgumentException("If statment expression evaluated to number, needs to be boolean");
+                    }
+                    else if(statement.IndexOf("elseif ") == 0)
+                    {
+                        if(lastBlock != null && !lastBlock.ChainExecute && lastBlock.Depth == depth)
+                        {
+                            object expression = expressionParser.Parse(statement.Substring(7), state);
+                            if(expression is bool execute)
+                                blocks.Push(new ControlBlock(depth, execute, execute | lastBlock.ChainExecute));
+                            else
+                                throw new ArgumentException("If statment expression evaluated to number, needs to be boolean");
+                        }
+                        else
+                        {
+                            blocks.Push(new ControlBlock(depth, false, lastBlock.ChainExecute));
+                        }
+                    }
+                    else if(statement.IndexOf("else") == 0)
+                    {
+                        if(lastBlock != null && !lastBlock.ChainExecute && lastBlock.Depth == depth)
+                            blocks.Push(new ControlBlock(depth, !lastBlock.Execute, false));
+                        else
+                            blocks.Push(new ControlBlock(depth, false, lastBlock.ChainExecute));
                     }
                     else
                     {
@@ -77,7 +99,7 @@ namespace Engine
                                     state[name] = result;
                                 else
                                     throw new ArgumentException("Assigment did not evaluate to a number or a boolean");
-
+                                
                                 break;
                             }
                         }
@@ -97,17 +119,21 @@ namespace Engine
     class ControlBlock
     {
         public int Depth { get; private set; }
+
         public bool Execute { get; private set; }
+
+        public bool ChainExecute { get; private set; }
 
         /// <summary>
         /// Constructa new ControlBlock with the given 
         /// </summary>
         /// <param name="depth"></param>
         /// <param name="execute"></param>
-        public ControlBlock(int depth, bool execute)
+        public ControlBlock(int depth, bool execute, bool chainExecute)
         {
             Depth = depth;
             Execute = execute;
+            ChainExecute = chainExecute;
         }
     }
 }
