@@ -10,18 +10,17 @@ namespace BotScripts_UI
     public partial class GameplayForm : Form
     {
         World world;
-        bool inEditor = true;
-        Score score;
+        GameplayUpdater GameUpdater;
+
         /// <summary>
         /// Initializes Form and bots
         /// </summary>
         public GameplayForm()
         {
-            InitializeComponent();
-            
             world = new World(new Bot(new PointF(50, 300), 0.0f, new Renderable(new List<PointF>(), true)), new Bot(new PointF(350, 200), (float)Math.PI, new Renderable(new List<PointF>(), true)));
+            GameUpdater = new GameplayUpdater(world);
 
-            score = new Score(world.PlayerBot, world.ComputerBot);
+            InitializeComponent();            
 
             ResizePanels();
         }
@@ -37,13 +36,30 @@ namespace BotScripts_UI
         {
             world.Update();
             world.Render(e.Graphics);
-            score.Update();
+            GameUpdater.Update();
+            showWinnerIfWinner();
 
             startButton.Update();
+            IntroButton.Update();
+            AcceptedInputsButton.Update();
+            SimpleScriptExampleButton.Update();
+
             PlayerInputTexBox.Update();
+            WinnerTextBox.Update();
 
             System.Threading.Thread.Sleep(16);
             gamePanel.Invalidate();
+        }
+
+        private void showWinnerIfWinner()
+        {
+            if (GameUpdater.winner != "")
+            {
+                WinnerTextBox.Text = "The " + GameUpdater.winner + " wins!";
+                WinnerTextBox.Visible = true;
+
+                //toggleStartOrStop();
+            }
         }
 
         /// <summary>
@@ -58,7 +74,7 @@ namespace BotScripts_UI
 
             playerCodePanel.Width = panelWidth;
 
-            if (inEditor)
+            if (world.inEditor)
             {
                 botCodePanel.Width = panelWidth * 2;
             }
@@ -79,14 +95,24 @@ namespace BotScripts_UI
 
         private void startButton_Click(object sender, EventArgs e)
         {
-            if (inEditor)
+            toggleStartOrStop();
+        }
+
+        private void toggleStartOrStop()
+        {
+            if (world.inEditor)
             {
+                if (WinnerTextBox.Visible == true)
+                {
+                    WinnerTextBox.Visible = false;
+                }
+
                 PlayerInputTexBox.ReadOnly = true;
                 startButton.Text = "Stop";
 
                 world.setPlayerCode(PlayerInputTexBox.Lines);
 
-                inEditor = false;
+                GameUpdater.Reset();
             }
             else
             {
@@ -94,9 +120,9 @@ namespace BotScripts_UI
                 PlayerInputTexBox.ReadOnly = false;
 
                 world.setPlayerCode(new string[] { "" });
-
-                inEditor = true;
             }
+
+            world.inEditor = !world.inEditor;
             ResizePanels();
         }
     }

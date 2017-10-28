@@ -12,10 +12,25 @@ namespace Engine
         private CodeParser playerParser;
         private CodeParser computerParser;
 
+        private PointF playerBotStartPos;
+        private float playerBotStartAngle;
+
+        private PointF computerBotStartPos;
+        private float computerBotStartAngle;
+
+
+        public bool inEditor = true;
+
         public World(Bot playerBot, Bot computerBot)
         {
             PlayerBot = playerBot;
             ComputerBot = computerBot;
+
+            playerBotStartPos = PlayerBot.Position;
+            playerBotStartAngle = PlayerBot.Angle;
+
+            computerBotStartPos = computerBot.Position;
+            computerBotStartAngle = computerBot.Angle;
 
             HashSet<String> inputVariables = new HashSet<String>() {
                 "eyes.left",
@@ -143,6 +158,15 @@ namespace Engine
 
             PlayerBot.Render(g);
             ComputerBot.Render(g);
+        }
+
+        public void ResetBots()
+        {
+            PlayerBot.Position = playerBotStartPos;
+            PlayerBot.Angle = playerBotStartAngle;
+
+            ComputerBot.Position = computerBotStartPos;
+            ComputerBot.Angle = computerBotStartAngle;
         }
     }
 }
