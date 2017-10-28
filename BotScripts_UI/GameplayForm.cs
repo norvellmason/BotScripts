@@ -9,7 +9,7 @@ namespace BotScripts_UI
     public partial class GameplayForm : Form
     {
         World world;
-
+        bool inEditor = true;
         /// <summary>
         /// Initializes Form and bots
         /// </summary>
@@ -52,7 +52,14 @@ namespace BotScripts_UI
                 panelWidth = 1000;
 
             playerCodePanel.Width = panelWidth;
-            botCodePanel.Width = panelWidth;
+
+            if (inEditor)
+            {
+                botCodePanel.Width = panelWidth * 2;
+            }
+            else
+                botCodePanel.Width = panelWidth;
+
         }
 
         /// <summary>
@@ -67,12 +74,14 @@ namespace BotScripts_UI
 
         private void startButton_Click(object sender, EventArgs e)
         {
-            if (startButton.Text == "Fight")
+            if (inEditor)
             {
                 PlayerInputTexBox.ReadOnly = true;
                 startButton.Text = "Stop";
 
                 world.setPlayerCode(PlayerInputTexBox.Lines);
+
+                inEditor = false;
             }
             else
             {
@@ -80,7 +89,10 @@ namespace BotScripts_UI
                 PlayerInputTexBox.ReadOnly = false;
 
                 world.setPlayerCode(new string[] { "" });
+
+                inEditor = true;
             }
+            ResizePanels();
         }
     }
 }
