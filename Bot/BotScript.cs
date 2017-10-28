@@ -25,6 +25,17 @@ namespace Engine
                 lines.Add(new Line(this.variables, this.outputs, this.operators));
         }
 
+        public BotScript(BotScript source)
+        {
+            variables = source.variables;
+            outputs = source.outputs;
+            operators = source.operators;
+
+            lines = new List<Line>();
+            foreach(Line line in source.lines)
+                lines.Add(new Line(line));
+        }
+
         public String[] getLines()
         {
             List<String> lines = new List<String>();
@@ -72,6 +83,15 @@ namespace Engine
             }
 
             operands.Add(GetOperand(variables));
+        }
+
+        public Line(Line line)
+        {
+            depth = line.depth;
+            head = line.head;
+
+            operands = new List<String>(line.operands);
+            operators = new List<String>(line.operators);
         }
 
         public void Mutate(List<String> variables, List<String> outputs, List<String> operators)
