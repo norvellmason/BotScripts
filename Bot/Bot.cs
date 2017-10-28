@@ -15,12 +15,12 @@ namespace Engine
         /// <summary>
         /// The position of the bot in the world.
         /// </summary>
-        public PointF Position { get; private set; }
+        public PointF Position { get; set; }
 
         /// <summary>
         /// The angle that the bot is facing.
         /// </summary>
-        public float Angle { get; private set; }
+        public float Angle { get; set; }
 
         /// <summary>
         /// The path that defines the bot when it renders

@@ -8,9 +8,7 @@ namespace BotScripts_UI
 {
     public partial class GameplayForm : Form
     {
-        Bot testBot;
-        Bot testBot2;
-        List<Bot> botsToRender = new List<Bot>();
+        World world;
 
         /// <summary>
         /// Initializes Form and bots
@@ -18,12 +16,8 @@ namespace BotScripts_UI
         public GameplayForm()
         {
             InitializeComponent();
-
-            testBot  = new Bot(new PointF(50, 300), 0.0f, new Renderable(new List<PointF>(), true));
-            testBot2 = new Bot(new PointF(350, 300), (float)Math.PI, new Renderable(new List<PointF>() , true));
-
-            botsToRender.Add(testBot);
-            botsToRender.Add(testBot2);
+            
+            world = new World(new Bot(new PointF(50, 300), 0.0f, new Renderable(new List<PointF>(), true)), new Bot(new PointF(350, 200), (float)Math.PI, new Renderable(new List<PointF>(), true)));
 
             ResizePanels();
         }
@@ -37,10 +31,8 @@ namespace BotScripts_UI
         /// <param name="e"></param>
         private void GameplayForm_Paint(object sender, PaintEventArgs e)
         {
-            e.Graphics.Clear(Color.White);
-
-            foreach(Bot bot in botsToRender)
-                bot.Render(e.Graphics);
+            world.Update();
+            world.Render(e.Graphics);
 
             System.Threading.Thread.Sleep(16);
             Invalidate();
