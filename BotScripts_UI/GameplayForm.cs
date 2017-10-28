@@ -35,6 +35,7 @@ namespace BotScripts_UI
             world.Render(e.Graphics);
 
             startButton.Update();
+            PlayerInputTexBox.Update();
 
             System.Threading.Thread.Sleep(16);
             panel1.Invalidate();
@@ -71,8 +72,7 @@ namespace BotScripts_UI
                 PlayerInputTexBox.ReadOnly = true;
                 startButton.Text = "Stop";
 
-                String[] parsedCode = PlayerInputTexBox.Text.Split('\n');
-                world.setPlayerCode(parsedCode);
+                world.setPlayerCode(PlayerInputTexBox.Lines);
             }
             else
             {

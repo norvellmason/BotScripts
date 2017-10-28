@@ -30,10 +30,10 @@
         {
             this.playerCodePanel = new System.Windows.Forms.Panel();
             this.PlayerInputTexBox = new System.Windows.Forms.TextBox();
+            this.startButton = new System.Windows.Forms.Button();
             this.botCodePanel = new System.Windows.Forms.Panel();
             this.AITexBox = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.startButton = new System.Windows.Forms.Button();
             this.playerCodePanel.SuspendLayout();
             this.botCodePanel.SuspendLayout();
             this.SuspendLayout();
@@ -57,6 +57,18 @@
             this.PlayerInputTexBox.Name = "PlayerInputTexBox";
             this.PlayerInputTexBox.Size = new System.Drawing.Size(125, 437);
             this.PlayerInputTexBox.TabIndex = 0;
+            // 
+            // startButton
+            // 
+            this.startButton.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.startButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.startButton.Location = new System.Drawing.Point(0, 437);
+            this.startButton.Name = "startButton";
+            this.startButton.Size = new System.Drawing.Size(125, 94);
+            this.startButton.TabIndex = 0;
+            this.startButton.Text = "Fight";
+            this.startButton.UseVisualStyleBackColor = true;
+            this.startButton.Click += new System.EventHandler(this.startButton_Click);
             // 
             // botCodePanel
             // 
@@ -87,18 +99,6 @@
             this.panel1.Size = new System.Drawing.Size(894, 531);
             this.panel1.TabIndex = 2;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.GameplayForm_Paint);
-            // 
-            // startButton
-            // 
-            this.startButton.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.startButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 16.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.startButton.Location = new System.Drawing.Point(0, 437);
-            this.startButton.Name = "startButton";
-            this.startButton.Size = new System.Drawing.Size(125, 94);
-            this.startButton.TabIndex = 0;
-            this.startButton.Text = "Fight";
-            this.startButton.UseVisualStyleBackColor = true;
-            this.startButton.Click += new System.EventHandler(this.startButton_Click);
             // 
             // GameplayForm
             // 
