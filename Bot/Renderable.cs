@@ -37,14 +37,32 @@ namespace Engine
         /// <param name="position">position in world that points are relative to</param>
         /// <param name="angle">angle at which object is rendered</param>
         /// <param name="g">graphics object used to render renderable</param>
-        public void Render(PointF position, float angle, Graphics g)
+        public void Render(PointF position, float angle, Color color, Graphics g)
         {
-            Pen blackPen = new Pen(Color.Black, 3);
+            Pen pen = new Pen(color, 3);
 
-            for (int i = 0; i < points.Count - 1; i++)
+            List<PointF> matrix = new List<PointF> { new PointF((float)Math.Cos(angle), -(float)Math.Sin(angle)),
+                                                     new PointF((float)Math.Sin(angle),  (float)Math.Cos(angle))};
+
+            List<PointF> onScreenPoints = new List<PointF>();
+
+            for (int i = 0; i < points.Count; i++)
             {
-                g.DrawLine(blackPen, points[i], points[i + 1]);
+                PointF point = points[i];
+
+                float xOffSet = matrix[0].X * point.X + matrix[0].Y * point.Y;
+                float yOffSet = matrix[1].X * point.X + matrix[1].Y * point.Y;
+
+                onScreenPoints.Add(new PointF(position.X + xOffSet, position.Y - yOffSet));
             }
+
+            for (int i = 1; i < points.Count; i++)
+            {
+                g.DrawLine(pen, onScreenPoints[i-1], onScreenPoints[i]);
+            }
+
+            if (closed)
+                g.DrawLine(pen, onScreenPoints[onScreenPoints.Count - 1], onScreenPoints[0]);
         }
     }
 }

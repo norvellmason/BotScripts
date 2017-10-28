@@ -25,7 +25,7 @@ namespace Engine
         /// <summary>
         /// The path that defines the bot when it renders
         /// </summary>
-        public Renderable BotRenderable { get; private set; }
+        public Renderable Renderable { get; private set; }
 
         /// <summary>
         /// Construct a new bot with at the given x and y cooridnates, and the
@@ -40,7 +40,8 @@ namespace Engine
         {
             Position = new PointF(x, y);
             Angle = angle;
-            BotRenderable = renderable;
+            Renderable = renderable;
+            SetRenderable();
         }
 
         /// <summary>
@@ -54,7 +55,13 @@ namespace Engine
         {
             Position = position;
             Angle = angle;
-            BotRenderable = renderable;
+            Renderable = renderable;
+            SetRenderable();
+        }
+
+        public void SetRenderable()
+        {
+
         }
     }
 }
