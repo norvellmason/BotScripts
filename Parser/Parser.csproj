@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CodeParser.cs" />
+    <Compile Include="CodeParserExperiemental.cs" />
     <Compile Include="ExpressionParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

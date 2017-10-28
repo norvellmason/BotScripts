@@ -27,6 +27,27 @@ namespace Engine
         /// </summary>
         public Renderable Renderable { get; private set; }
 
+        private PointF spikeLocation = new PointF();
+
+        public PointF SpikeLocation {
+            get
+            {
+                float[][] matrix = { new float[] { (float)Math.Cos(Angle), -(float)Math.Sin(Angle) },
+                                     new float[] { (float)Math.Sin(Angle),  (float)Math.Cos(Angle) } };
+
+                float xOffSet = matrix[0][0] * spikeLocation.X + matrix[0][1] * spikeLocation.Y;
+                float yOffSet = matrix[1][0] * spikeLocation.X + matrix[1][1] * spikeLocation.Y;
+
+                return new PointF(Position.X + xOffSet, Position.Y - yOffSet);
+
+                //return spikeLocation;
+            }
+            private set
+            {
+                spikeLocation = value;
+            }
+        }
+
         /// <summary>
         /// Construct a new bot with at the given x and y cooridnates, and the
         /// given angle.
@@ -66,7 +87,9 @@ namespace Engine
 
         public void CreateBotRenderable(int numPoints, float radius, float spikeLength)
         {
-            Renderable.points.Add(new PointF(radius + spikeLength, 0));
+            spikeLocation = new PointF(radius + spikeLength, 0);
+
+            Renderable.points.Add(spikeLocation);
 
             for(int i = 1; i < numPoints; i++)
             {

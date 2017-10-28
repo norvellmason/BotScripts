@@ -1,15 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.8
+VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bot", "Bot\Bot.csproj", "{BBD00C5A-7C52-4506-9765-6021FEC024B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BotScripts_UI", "BotScripts_UI\BotScripts_UI.csproj", "{1BBD6E74-4F3E-4F2B-A26E-D8CDCAAD5168}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI", "BotScripts_UI\UI.csproj", "{1BBD6E74-4F3E-4F2B-A26E-D8CDCAAD5168}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parser", "Parser\Parser.csproj", "{6453E477-B52B-4C9A-AB0D-C58609ED9E53}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeParserInteractive", "CodeParserInteractive\CodeParserInteractive.csproj", "{AFA9A4E3-477F-4050-903C-8C4024B1F183}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameplayElements", "GameplayElements\GameplayElements.csproj", "{88DC27D5-9144-4E2F-A28A-5A02148F7019}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{AFA9A4E3-477F-4050-903C-8C4024B1F183}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AFA9A4E3-477F-4050-903C-8C4024B1F183}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AFA9A4E3-477F-4050-903C-8C4024B1F183}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88DC27D5-9144-4E2F-A28A-5A02148F7019}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88DC27D5-9144-4E2F-A28A-5A02148F7019}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88DC27D5-9144-4E2F-A28A-5A02148F7019}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88DC27D5-9144-4E2F-A28A-5A02148F7019}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

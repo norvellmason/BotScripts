@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using Engine;
+using GameplayElements;
 
 namespace BotScripts_UI
 {
@@ -10,6 +11,7 @@ namespace BotScripts_UI
     {
         World world;
         bool inEditor = true;
+        Score score;
         /// <summary>
         /// Initializes Form and bots
         /// </summary>
@@ -18,6 +20,8 @@ namespace BotScripts_UI
             InitializeComponent();
             
             world = new World(new Bot(new PointF(50, 300), 0.0f, new Renderable(new List<PointF>(), true)), new Bot(new PointF(350, 200), (float)Math.PI, new Renderable(new List<PointF>(), true)));
+
+            score = new Score(world.PlayerBot, world.ComputerBot);
 
             ResizePanels();
         }
@@ -33,6 +37,7 @@ namespace BotScripts_UI
         {
             world.Update();
             world.Render(e.Graphics);
+            score.Update();
 
             startButton.Update();
             PlayerInputTexBox.Update();
