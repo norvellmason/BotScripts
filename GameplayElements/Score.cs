@@ -61,7 +61,7 @@ namespace GameplayElements
             }
 
             enemyScore -= ((EnemyBot.Position.X - PlayerBot.Position.X) * (EnemyBot.Position.X - PlayerBot.Position.X)
-                           + (EnemyBot.Position.Y - PlayerBot.Position.Y) * (EnemyBot.Position.Y - PlayerBot.Position.Y))/100;
+                           + (EnemyBot.Position.Y - PlayerBot.Position.Y) * (EnemyBot.Position.Y - PlayerBot.Position.Y))/100000.0f;
         }
 
         private bool isHit(Bot target, PointF spikeLocation)

@@ -94,7 +94,7 @@
             this.MenuButtonsPanel.ColumnCount = 3;
             this.MenuButtonsPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 39.63964F));
             this.MenuButtonsPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60.36036F));
-            this.MenuButtonsPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 148F));
+            this.MenuButtonsPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 152F));
             this.MenuButtonsPanel.Controls.Add(this.SimpleScriptExampleButton, 2, 0);
             this.MenuButtonsPanel.Controls.Add(this.IntroButton, 0, 0);
             this.MenuButtonsPanel.Controls.Add(this.AcceptedInputsButton, 1, 0);
@@ -111,9 +111,9 @@
             // SimpleScriptExampleButton
             // 
             this.SimpleScriptExampleButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.SimpleScriptExampleButton.Location = new System.Drawing.Point(114, 3);
+            this.SimpleScriptExampleButton.Location = new System.Drawing.Point(110, 3);
             this.SimpleScriptExampleButton.Name = "SimpleScriptExampleButton";
-            this.SimpleScriptExampleButton.Size = new System.Drawing.Size(143, 94);
+            this.SimpleScriptExampleButton.Size = new System.Drawing.Size(147, 94);
             this.SimpleScriptExampleButton.TabIndex = 2;
             this.SimpleScriptExampleButton.Text = "Simple Script Example";
             this.SimpleScriptExampleButton.UseVisualStyleBackColor = true;
@@ -123,7 +123,7 @@
             this.IntroButton.Dock = System.Windows.Forms.DockStyle.Fill;
             this.IntroButton.Location = new System.Drawing.Point(3, 3);
             this.IntroButton.Name = "IntroButton";
-            this.IntroButton.Size = new System.Drawing.Size(38, 94);
+            this.IntroButton.Size = new System.Drawing.Size(36, 94);
             this.IntroButton.TabIndex = 0;
             this.IntroButton.Text = "Intro";
             this.IntroButton.UseVisualStyleBackColor = true;
@@ -131,9 +131,9 @@
             // AcceptedInputsButton
             // 
             this.AcceptedInputsButton.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.AcceptedInputsButton.Location = new System.Drawing.Point(47, 3);
+            this.AcceptedInputsButton.Location = new System.Drawing.Point(45, 3);
             this.AcceptedInputsButton.Name = "AcceptedInputsButton";
-            this.AcceptedInputsButton.Size = new System.Drawing.Size(61, 94);
+            this.AcceptedInputsButton.Size = new System.Drawing.Size(59, 94);
             this.AcceptedInputsButton.TabIndex = 1;
             this.AcceptedInputsButton.Text = "Accepted Inputs";
             this.AcceptedInputsButton.UseVisualStyleBackColor = true;

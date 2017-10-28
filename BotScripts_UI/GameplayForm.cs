@@ -43,7 +43,14 @@ namespace BotScripts_UI
 
                 foreach (BotScript script in population) {
                     updater.Reset();
-                    fakeWorld.setComputerCode(script.getLines());
+
+                    Random random = new Random();
+                    if (random.NextDouble() < 0.5)
+                        fakeWorld.setComputerCode(new String[0]);
+                    else
+                        fakeWorld.setComputerCode(new String[] { "control.forward = true" });
+                    
+                    //fakeWorld.setComputerCode(script.getLines());
 
                     for (int i = 0; i < 600; i++)
                     {
@@ -58,7 +65,7 @@ namespace BotScripts_UI
 
                 result.Sort((left, right) => left.score > right.score ? 1 : -1);
 
-                PlayerInputTexBox.Text = result[0].score.ToString() + " to " + result[result.Count - 1].score.ToString();
+                PlayerInputTexBox.Text = ( result[0].score.ToString() + " to " + result[result.Count - 1].score.ToString());
             }
 
             return new String[0];

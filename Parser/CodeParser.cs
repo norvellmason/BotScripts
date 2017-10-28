@@ -120,8 +120,8 @@ namespace Engine
                                 bestVAr = name;
                         }
 
-                        if(bestVAr == "")
-                            throw new ArgumentException("Could not find varaible");
+                        if (bestVAr == "")
+                            continue;
                         
                         if(outputVariables.Contains(bestVAr)) {
                             String expression = Regex.Replace(statement.Substring(bestVAr.Length), @"^\s*=\s*", "");

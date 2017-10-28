@@ -22,8 +22,8 @@ namespace GameplayElements
 
         public void Update()
         {
+            world.Update();
             score.Update();
-
             score.tryGetWinner(out winner);
         }
 
