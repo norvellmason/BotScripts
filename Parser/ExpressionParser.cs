@@ -10,7 +10,7 @@ namespace Engine
     /// <summary>
     /// Provides the ability to parse an expression into a value.
     /// </summary>
-    public class Parser
+    public class ExpressionParse
     {
         /// <summary>
         /// Performs an operation on a single operand. If the opertion cannot be
@@ -67,12 +67,128 @@ namespace Engine
         /// <param name="unaryOperators">the supported unary operators</param>
         /// <param name="infixOperators">the supported infix operators</param>
         /// <param name="variableNames">the supported variable names</param>
-        public Parser(Dictionary<String, UnaryOperator> unaryOperators, Dictionary<String, InfixOperator> infixOperators, List<String> infixOrder, HashSet<String> variableNames)
+        public ExpressionParse(Dictionary<String, UnaryOperator> unaryOperators, Dictionary<String, InfixOperator> infixOperators, List<String> infixOrder, HashSet<String> variableNames)
         {
             this.unaryOperators = unaryOperators;
             this.infixOperators = infixOperators;
             this.infixOrder = infixOrder;
             this.variableNames = variableNames;
+        }
+        
+        /// <summary>
+        /// Create a parser with default opertors.
+        /// </summary>
+        /// 
+        /// <param name="variableNames">the varaible names to use with the
+        /// parser</param>
+        /// 
+        /// <returns>the new parser</returns>
+        public static ExpressionParse GetDefaultParser(HashSet<String> variableNames)
+        {
+            Dictionary<String, UnaryOperator> unaryOperators = new Dictionary<String, UnaryOperator>();
+            unaryOperators.Add("-", (operand) => {
+                if(operand is float)
+                    return -(float)operand;
+
+                throw new ArgumentException("A boolean cannot be negated");
+            });
+            unaryOperators.Add("!", (operand) => {
+                if(operand is bool)
+                    return !(bool)operand;
+
+                throw new ArgumentException("A number cannot be inverted");
+            });
+
+            Dictionary<String, InfixOperator> infixOperators = new Dictionary<String, InfixOperator>();
+            infixOperators.Add("*", (left, right) => {
+                if(left is float && right is float)
+                    return (float)left * (float)right;
+
+                throw new ArgumentException("Only numbers can be multiplied");
+            });
+            infixOperators.Add("/", (left, right) => {
+                if(left is float && right is float)
+                {
+                    if((float)right == 0)
+                        throw new ArgumentException("Cannot divide by zero");
+
+                    return (float)left / (float)right;
+                }
+
+                throw new ArgumentException("Only numbers can be divided");
+            });
+            infixOperators.Add("+", (left, right) => {
+                if(left is float && right is float)
+                    return (float)left + (float)right;
+
+                throw new ArgumentException("Only numbers can be added");
+            });
+            infixOperators.Add("-", (left, right) => {
+                if(left is float && right is float)
+                    return (float)left + (float)right;
+
+                throw new ArgumentException("Only numbers can be subtracted");
+            });
+
+            infixOperators.Add(">", (left, right) => {
+                if(left is float && right is float)
+                    return (float)left > (float)right;
+
+                throw new ArgumentException("Only numbers can be ordered");
+            });
+            infixOperators.Add("<", (left, right) => {
+                if(left is float && right is float)
+                    return (float)left < (float)right;
+
+                throw new ArgumentException("Only numbers can be ordered");
+            });
+            infixOperators.Add(">=", (left, right) => {
+                if(left is float && right is float)
+                    return (float)left >= (float)right;
+
+                throw new ArgumentException("Only numbers can be ordered");
+            });
+            infixOperators.Add("<=", (left, right) => {
+                if(left is float && right is float)
+                    return (float)left <= (float)right;
+
+                throw new ArgumentException("Only numbers can be ordered");
+            });
+            infixOperators.Add("==", (left, right) => {
+                if(left is float && right is float)
+                    return (float)left == (float)right;
+                else if(left is bool && right is bool)
+                    return (bool)left == (bool)right;
+
+                throw new ArgumentException("Cannot compare bools and numbers");
+            });
+            infixOperators.Add("!=", (left, right) => {
+                if(left is float && right is float)
+                    return (float)left != (float)right;
+                else if(left is bool && right is bool)
+                    return (bool)left != (bool)right;
+
+                throw new ArgumentException("Cannot compare bools and numbers");
+            });
+
+            infixOperators.Add("||", (left, right) => {
+                if(left is bool && right is bool)
+                    return (bool)left && (bool)right;
+
+                throw new ArgumentException("Cannot and together ");
+            });
+            infixOperators.Add("&&", (left, right) => {
+                if(left is bool && right is bool)
+                    return (bool)left && (bool)right;
+
+                throw new ArgumentException("Cannot and together ");
+            });
+
+            List<String> infixOrder = new List<String>() {
+                "*", "/", "+", "-", ">", "<", ">=", "<=", "==", "!=", "||", "&&"
+            };
+
+            return new ExpressionParse(unaryOperators, infixOperators, infixOrder, variableNames);
         }
 
         /// <summary>
