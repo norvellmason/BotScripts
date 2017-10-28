@@ -37,10 +37,12 @@
             this.IntroButton = new System.Windows.Forms.Button();
             this.AITexBox = new System.Windows.Forms.TextBox();
             this.gamePanel = new BotScripts_UI.DoubleBufferedPanel();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.MenuButtonsPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.WinnerTextBox = new System.Windows.Forms.TextBox();
             this.playerCodePanel.SuspendLayout();
             this.botCodePanel.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
+            this.gamePanel.SuspendLayout();
+            this.MenuButtonsPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // playerCodePanel
@@ -78,7 +80,7 @@
             // botCodePanel
             // 
             this.botCodePanel.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.botCodePanel.Controls.Add(this.tableLayoutPanel1);
+            this.botCodePanel.Controls.Add(this.MenuButtonsPanel);
             this.botCodePanel.Controls.Add(this.AITexBox);
             this.botCodePanel.Dock = System.Windows.Forms.DockStyle.Right;
             this.botCodePanel.Location = new System.Drawing.Point(858, 0);
@@ -128,6 +130,7 @@
             // 
             // gamePanel
             // 
+            this.gamePanel.Controls.Add(this.WinnerTextBox);
             this.gamePanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gamePanel.Location = new System.Drawing.Point(125, 0);
             this.gamePanel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -136,23 +139,33 @@
             this.gamePanel.TabIndex = 2;
             this.gamePanel.Paint += new System.Windows.Forms.PaintEventHandler(this.GameForm_Paint);
             // 
-            // tableLayoutPanel1
+            // MenuButtonsPanel
             // 
-            this.tableLayoutPanel1.ColumnCount = 3;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 44.87805F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55.12195F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 85F));
-            this.tableLayoutPanel1.Controls.Add(this.SimpleScriptExampleButton, 2, 0);
-            this.tableLayoutPanel1.Controls.Add(this.IntroButton, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.AcceptedInputsButton, 1, 0);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tableLayoutPanel1.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 1;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(260, 100);
-            this.tableLayoutPanel1.TabIndex = 0;
+            this.MenuButtonsPanel.ColumnCount = 3;
+            this.MenuButtonsPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 44.87805F));
+            this.MenuButtonsPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 55.12195F));
+            this.MenuButtonsPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 85F));
+            this.MenuButtonsPanel.Controls.Add(this.SimpleScriptExampleButton, 2, 0);
+            this.MenuButtonsPanel.Controls.Add(this.IntroButton, 0, 0);
+            this.MenuButtonsPanel.Controls.Add(this.AcceptedInputsButton, 1, 0);
+            this.MenuButtonsPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.MenuButtonsPanel.GrowStyle = System.Windows.Forms.TableLayoutPanelGrowStyle.FixedSize;
+            this.MenuButtonsPanel.Location = new System.Drawing.Point(0, 0);
+            this.MenuButtonsPanel.Name = "MenuButtonsPanel";
+            this.MenuButtonsPanel.RowCount = 1;
+            this.MenuButtonsPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.MenuButtonsPanel.Size = new System.Drawing.Size(260, 100);
+            this.MenuButtonsPanel.TabIndex = 0;
+            // 
+            // WinnerTextBox
+            // 
+            this.WinnerTextBox.Dock = System.Windows.Forms.DockStyle.Top;
+            this.WinnerTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.WinnerTextBox.Location = new System.Drawing.Point(0, 0);
+            this.WinnerTextBox.Name = "WinnerTextBox";
+            this.WinnerTextBox.ReadOnly = true;
+            this.WinnerTextBox.Size = new System.Drawing.Size(733, 53);
+            this.WinnerTextBox.TabIndex = 0;
             // 
             // GameplayForm
             // 
@@ -170,7 +183,9 @@
             this.playerCodePanel.PerformLayout();
             this.botCodePanel.ResumeLayout(false);
             this.botCodePanel.PerformLayout();
-            this.tableLayoutPanel1.ResumeLayout(false);
+            this.gamePanel.ResumeLayout(false);
+            this.gamePanel.PerformLayout();
+            this.MenuButtonsPanel.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -186,7 +201,8 @@
         private System.Windows.Forms.Button IntroButton;
         private System.Windows.Forms.Button SimpleScriptExampleButton;
         private System.Windows.Forms.Button AcceptedInputsButton;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.TableLayoutPanel MenuButtonsPanel;
+        private System.Windows.Forms.TextBox WinnerTextBox;
     }
 }
 

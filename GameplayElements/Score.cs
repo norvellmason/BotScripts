@@ -23,6 +23,21 @@ namespace GameplayElements
             EnemyBot = enemyBot;
         }
 
+        public void tryGetWinner(out string winner)
+        {
+            if (playerScore > 100)
+            {
+                winner = "Player";
+                return;
+            }
+            else if(enemyScore > 100)
+            {
+                winner = "Enemy";
+                return;
+            }
+            winner = "";
+        }
+
         public void Reset()
         {
             playerScore = 0;
