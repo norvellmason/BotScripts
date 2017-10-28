@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Engine
 {
@@ -38,6 +35,13 @@ namespace Engine
             expressionParser = ExpressionParser.GetDefaultParser(variables);
         }
 
+        /// <summary>
+        /// Executes the code given to this parser, using a given set of inputs.
+        /// </summary>
+        /// 
+        /// <param name="state">the inputs to the program</param>
+        /// 
+        /// <returns>the inputs after the code has executed</returns>
         public Dictionary<String, object> Execute(Dictionary<String, object> state)
         {
             Stack<ControlBlock> blocks = new Stack<ControlBlock>();

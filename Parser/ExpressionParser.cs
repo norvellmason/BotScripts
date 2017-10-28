@@ -158,7 +158,7 @@ namespace Engine
 
             infixOperators.Add("||", (left, right) => {
                 if(left is bool && right is bool)
-                    return (bool)left && (bool)right;
+                    return (bool)left || (bool)right;
 
                 throw new ArgumentException("Cannot and together ");
             });
