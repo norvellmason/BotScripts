@@ -31,34 +31,12 @@ namespace Engine
 
             computerBotStartPos = computerBot.Position;
             computerBotStartAngle = computerBot.Angle;
+            
+            playerParser = new CodeParser(new String[0], Bot.inputVariables, Bot.outputVariables);
 
-            HashSet<String> inputVariables = new HashSet<String>() {
-                "eyes.left",
-                "eyes.left.distance",
-                "eyes.right",
-                "eyes.right.distance"
-            };
+            BotScript computerScript = new BotScript(Bot.allVariables, Bot.outputVariables, Bot.operators, 50);
 
-            HashSet<String> outputVariables = new HashSet<String>() {
-                "control.left",
-                "control.right",
-                "control.forward",
-                "control.backward",
-            };
-
-            HashSet<String> variables = new HashSet<String>();
-            variables.UnionWith(inputVariables);
-            variables.UnionWith(outputVariables);
-
-            HashSet<String> operators = new HashSet<String>() {
-                "*", "/", "+", "-", ">", ">=", "<", "<=", "==", "!=", "!", "&&", "||"
-            };
-
-            playerParser = new CodeParser(new String[0], inputVariables, outputVariables);
-
-            BotScript computerScript = new BotScript(variables, outputVariables, operators, 50);
-
-            computerParser = new CodeParser(new String[0], inputVariables, outputVariables);
+            computerParser = new CodeParser(new String[0], Bot.inputVariables, Bot.outputVariables);
         }
 
         public void setPlayerCode(String[] code)

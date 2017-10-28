@@ -20,9 +20,60 @@ namespace BotScripts_UI
             world = new World(new Bot(new PointF(50, 300), 0.0f, new Renderable(new List<PointF>(), true)), new Bot(new PointF(350, 200), (float)Math.PI, new Renderable(new List<PointF>(), true)));
             GameUpdater = new GameplayUpdater(world);
 
-            InitializeComponent();            
+            InitializeComponent();
 
             ResizePanels();
+        }
+
+        public string[] SimulateFights(int generations)
+        {
+            World fakeWorld = new World(new Bot(new PointF(50, 300), 0.0f, new Renderable(new List<PointF>(), true)), new Bot(new PointF(350, 200), (float)Math.PI, new Renderable(new List<PointF>(), true)));
+            GameplayUpdater updater = new GameplayUpdater(fakeWorld);
+
+            fakeWorld.setPlayerCode(PlayerInputTexBox.Lines);
+
+            // init population
+            List<BotScript> population = new List<BotScript>();
+            for(int i = 0; i < 10; i++)
+                population.Add(new BotScript(Bot.allVariables, Bot.outputVariables, Bot.operators, 25));
+
+            while (generations-- > 0)
+            {
+                List<Result> result = new List<Result>();
+
+                foreach (BotScript script in population) {
+                    updater.Reset();
+                    fakeWorld.setComputerCode(script.getLines());
+
+                    for (int i = 0; i < 600; i++)
+                    {
+                        updater.Update();
+
+                        if (updater.winner != "")
+                            break;
+                    }
+
+                    result.Add(new Result(updater.score.enemyScore, script));
+                }
+
+                result.Sort((left, right) => left.score > right.score ? 1 : -1);
+
+                PlayerInputTexBox.Text = result[0].score.ToString() + " to " + result[result.Count - 1].score.ToString();
+            }
+
+            return new String[0];
+        }
+
+        class Result
+        {
+            public float score;
+            public BotScript script;
+
+            public Result(float score, BotScript script)
+            {
+                this.score = score;
+                this.script = script;
+            }
         }
 
         /// <summary>
@@ -110,7 +161,10 @@ namespace BotScripts_UI
                 PlayerInputTexBox.ReadOnly = true;
                 startButton.Text = "Stop";
 
+                String[] bestCode = SimulateFights(10);
+
                 world.setPlayerCode(PlayerInputTexBox.Lines);
+                world.setComputerCode(bestCode);
 
                 GameUpdater.Reset();
             }
@@ -120,6 +174,7 @@ namespace BotScripts_UI
                 PlayerInputTexBox.ReadOnly = false;
 
                 world.setPlayerCode(new string[] { "" });
+                world.setComputerCode(new string[] { "" });
             }
 
             world.inEditor = !world.inEditor;

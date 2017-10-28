@@ -51,6 +51,9 @@ namespace Engine
             
             foreach(String line in lines)
             {
+                if (line.Trim() == "")
+                    continue;
+
                 int depth = GetLineDepth(line);
                 String statement = line.Substring(depth);
 

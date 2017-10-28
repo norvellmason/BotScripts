@@ -9,7 +9,7 @@ namespace GameplayElements
 {
     public class GameplayUpdater
     {
-        Score score;
+        public Score score;
         World world;
 
         public string winner;
@@ -31,6 +31,7 @@ namespace GameplayElements
         {
             score.Reset();
             world.ResetBots();
+            winner = "";
         }
     }
 }

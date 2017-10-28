@@ -12,6 +12,26 @@ namespace Engine
     /// </summary>
     public class Bot
     {
+        public static HashSet<String> inputVariables = new HashSet<String>() {
+                "eyes.left",
+                "eyes.left.distance",
+                "eyes.right",
+                "eyes.right.distance",
+            };
+
+        public static HashSet<String> outputVariables = new HashSet<String>() {
+                "control.left",
+                "control.right",
+                "control.forward",
+                "control.backward",
+            };
+
+        public static HashSet<String> allVariables = new HashSet<string>(inputVariables.Union<String>(outputVariables));
+
+        public static HashSet<String> operators = new HashSet<String>() {
+                "*", "/", "+", "-", ">", ">=", "<", "<=", "==", "!=", "!", "&&", "||"
+            };
+
         /// <summary>
         /// The position of the bot in the world.
         /// </summary>

@@ -14,8 +14,10 @@ namespace GameplayElements
         public Bot PlayerBot;
         public Bot EnemyBot;
 
+        public string Winner = "";
+
         public int playerScore = 0;
-        public int enemyScore = 0;
+        public float enemyScore = 200;
 
         public Score(Bot playerBot, Bot enemyBot)
         {
@@ -25,17 +27,17 @@ namespace GameplayElements
 
         public void tryGetWinner(out string winner)
         {
-            if (playerScore > 1)
-            {
-                winner = "Player";
-                return;
-            }
-            else if(enemyScore > 1)
-            {
-                winner = "Enemy";
-                return;
-            }
-            winner = "";
+            //if (playerScore > 1)
+            //{
+            //    winner = "Player";
+            //    return;
+            //}
+            //else if(enemyScore > 1)
+            //{
+            //    winner = "Enemy";
+            //    return;
+            //}
+            winner = Winner;
         }
 
         public void Reset()
@@ -49,12 +51,17 @@ namespace GameplayElements
             
             if (isHit(EnemyBot, PlayerBot.SpikeLocation))
             {
-                playerScore += 10;
+                playerScore += 1000;
+                Winner = "Player";
             }
             else if (isHit(PlayerBot, EnemyBot.SpikeLocation))
             {
-                enemyScore += 10;
+                enemyScore += 1000;
+                Winner = "Enemy";
             }
+
+            enemyScore -= ((EnemyBot.Position.X - PlayerBot.Position.X) * (EnemyBot.Position.X - PlayerBot.Position.X)
+                           + (EnemyBot.Position.Y - PlayerBot.Position.Y) * (EnemyBot.Position.Y - PlayerBot.Position.Y))/100;
         }
 
         private bool isHit(Bot target, PointF spikeLocation)
@@ -73,5 +80,7 @@ namespace GameplayElements
 
             return spikeDistancetoTarget;
         }
+
+
     }
 }
