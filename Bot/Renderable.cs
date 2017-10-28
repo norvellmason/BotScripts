@@ -37,7 +37,7 @@ namespace Engine
         /// <param name="position">position in world that points are relative to</param>
         /// <param name="angle">angle at which object is rendered</param>
         /// <param name="g">graphics object used to render renderable</param>
-        public void Render(PointF position, float angle, Color color, Graphics g)
+        public void Render(Graphics g, PointF position, float angle, Color color)
         {
             // 2d rotation matrix
             float[][] matrix = { new float[] { (float)Math.Cos(angle), -(float)Math.Sin(angle) },

@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Engine;
 
@@ -30,39 +25,49 @@ namespace BotScripts_UI
             botsToRender.Add(testBot);
             botsToRender.Add(testBot2);
 
-            PlayerPanel.Width = Width / 4;
-            PlayerPanel.Height = Height;
-
-            BotPanel.Width = Width / 4;
-            BotPanel.Height = Height;
+            ResizePanels();
         }
 
         /// <summary>
         /// Gets calles when a paint event triggers, and renders all of the on screen elements using
         /// the graphics objects passed in.
         /// </summary>
+        /// 
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void GameplayForm_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.Clear(Color.White);
 
-            foreach (Bot bot in botsToRender)
-            {
-                bot.Renderable.Render(new PointF(bot.Position.X + Width / 4, bot.Position.Y), bot.Angle, Color.Black, e.Graphics);
-            }
+            foreach(Bot bot in botsToRender)
+                bot.Render(e.Graphics);
 
             System.Threading.Thread.Sleep(16);
             Invalidate();
         }
 
+        /// <summary>
+        /// Resizes the code panels.
+        /// </summary>
+        private void ResizePanels()
+        {
+            int panelWidth = Width / 4;
+            
+            if(panelWidth > 1000)
+                panelWidth = 1000;
+
+            playerCodePanel.Width = panelWidth;
+            botCodePanel.Width = panelWidth;
+        }
+
+        /// <summary>
+        /// Called when the window resizes.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void GameplayForm_Resize(object sender, EventArgs e)
         {
-            PlayerPanel.Width = Width / 4;
-            PlayerPanel.Height = Height;
-
-            BotPanel.Width = Width / 4;
-            BotPanel.Height = Height;
+            ResizePanels();
         }
     }
 }

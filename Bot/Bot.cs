@@ -59,6 +59,11 @@ namespace Engine
             CreateBotRenderable(12, 30f, 30f);
         }
 
+        public void Render(Graphics g)
+        {
+            Renderable.Render(g, Position, Angle, Color.Black);
+        }
+
         public void CreateBotRenderable(int numPoints, float radius, float spikeLength)
         {
             Renderable.points.Add(new PointF(radius + spikeLength, 0));

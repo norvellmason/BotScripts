@@ -28,40 +28,52 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.PlayerPanel = new System.Windows.Forms.Panel();
-            this.BotPanel = new System.Windows.Forms.Panel();
+            this.playerCodePanel = new System.Windows.Forms.Panel();
+            this.botCodePanel = new System.Windows.Forms.Panel();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.SuspendLayout();
             // 
-            // PlayerPanel
+            // playerCodePanel
             // 
-            this.PlayerPanel.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.PlayerPanel.Dock = System.Windows.Forms.DockStyle.Left;
-            this.PlayerPanel.Location = new System.Drawing.Point(0, 0);
-            this.PlayerPanel.Name = "PlayerPanel";
-            this.PlayerPanel.Size = new System.Drawing.Size(200, 673);
-            this.PlayerPanel.TabIndex = 0;
+            this.playerCodePanel.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.playerCodePanel.Dock = System.Windows.Forms.DockStyle.Left;
+            this.playerCodePanel.Location = new System.Drawing.Point(0, 0);
+            this.playerCodePanel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.playerCodePanel.Name = "playerCodePanel";
+            this.playerCodePanel.Size = new System.Drawing.Size(141, 664);
+            this.playerCodePanel.TabIndex = 0;
             // 
-            // BotPanel
+            // botCodePanel
             // 
-            this.BotPanel.BackColor = System.Drawing.SystemColors.ActiveCaption;
-            this.BotPanel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.BotPanel.Location = new System.Drawing.Point(1062, 0);
-            this.BotPanel.Name = "BotPanel";
-            this.BotPanel.Size = new System.Drawing.Size(200, 673);
-            this.BotPanel.TabIndex = 1;
+            this.botCodePanel.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.botCodePanel.Dock = System.Windows.Forms.DockStyle.Right;
+            this.botCodePanel.Location = new System.Drawing.Point(1147, 0);
+            this.botCodePanel.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.botCodePanel.Name = "botCodePanel";
+            this.botCodePanel.Size = new System.Drawing.Size(111, 664);
+            this.botCodePanel.TabIndex = 1;
+            // 
+            // panel1
+            // 
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(141, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(1006, 664);
+            this.panel1.TabIndex = 2;
+            this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.GameplayForm_Paint);
             // 
             // GameplayForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1262, 673);
-            this.Controls.Add(this.BotPanel);
-            this.Controls.Add(this.PlayerPanel);
+            this.ClientSize = new System.Drawing.Size(1258, 664);
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.botCodePanel);
+            this.Controls.Add(this.playerCodePanel);
             this.DoubleBuffered = true;
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "GameplayForm";
             this.Text = "BotScripts";
-            this.Paint += new System.Windows.Forms.PaintEventHandler(this.GameplayForm_Paint);
             this.Resize += new System.EventHandler(this.GameplayForm_Resize);
             this.ResumeLayout(false);
 
@@ -69,8 +81,9 @@
 
         #endregion
 
-        private System.Windows.Forms.Panel PlayerPanel;
-        private System.Windows.Forms.Panel BotPanel;
+        private System.Windows.Forms.Panel playerCodePanel;
+        private System.Windows.Forms.Panel botCodePanel;
+        private System.Windows.Forms.Panel panel1;
     }
 }
 
